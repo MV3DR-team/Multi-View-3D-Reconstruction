@@ -72,8 +72,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>E:\opencv\opencv\build\include\opencv2;E:\opencv\opencv\build\include;E:\opencv\opencv\build\include;E:\opencv\opencv\build\include\opencv2;$(IncludePath);E:\ccee\Ceres\Include</IncludePath>
-    <LibraryPath>E:\opencv\opencv\build\x64\vc16\lib;E:\opencv\opencv\build\x64\vc16\lib;$(LibraryPath);E:\ccee\Ceres\Library</LibraryPath>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>E:\opencv\opencv\build\include\opencv2;E:\opencv\opencv\build\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);;E:\ccee\Ceres\Include</IncludePath>
@@ -117,7 +117,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>E:\tools\vcpkg-master\installed\x64-windows\lib\pcl_io.lib;E:\tools\vcpkg-master\installed\x64-windows\lib\pcl_common.lib;E:\tools\vcpkg-master\installed\x64-windows\lib\pcl_surface.lib;E:\tools\opencv\opencv\contrib_new\install\x64\vc17\lib\opencv_img_hash480d.lib</AdditionalDependencies>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
