@@ -416,7 +416,7 @@ void main()
 	//images_path.push_back("B25.jpg");
 	
 
-	//本征矩阵
+	//内参矩阵
 	Mat K(Matx33d(
 		719.5459, 0, 0,    //719.5459
 		0, 719.5459, 0,
