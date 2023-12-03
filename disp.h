@@ -214,10 +214,7 @@ void SavePointCloud(const uint8* img_bytes, const float32* disp_map, const sint3
 
 
 	// 手动输出点云ply文件
-	std::ofstream ply_file("densePoints.ply");
-
-	
-
+	std::ofstream ply_file("./result/densePoints.ply");
 	// ply的头部信息
 	ply_file << "ply\n";
 	ply_file << "format ascii 1.0\n";

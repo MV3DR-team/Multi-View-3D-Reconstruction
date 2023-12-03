@@ -406,7 +406,6 @@ void save_ply_file(
 {
 	// 手动输出点云ply文件
 	std::ofstream ply_file(ply_save_path);
-
 	// ply的头部信息
 	ply_file << "ply\n";
 	ply_file << "format ascii 1.0\n";
@@ -426,7 +425,7 @@ void save_ply_file(
 			<< static_cast<int>(colors[i][1]) << " "
 			<< static_cast<int>(colors[i][0]) << std::endl;
 	}
-	//ply_file.close();
+	ply_file.close();
 }
 
 void main()
@@ -536,12 +535,16 @@ void main()
 
 		extrinsics.push_back(extrinsic);
 	}
+
+
+	save_ply_file("./result/output_test_BA.ply", structure, colors);
+
+
 	bundle_adjustment(intrinsic, extrinsics, correspond_struct_idx, key_points_for_all, structure);
 	//以上为bundlead_justment算法
 	for (int i = 0; i < intrinsic.rows; i++) { for (int j = 0; j < intrinsic.cols; j++) { cout << intrinsic.at<double>(i, j) << " "; } cout << endl; }
 
 
-	save_ply_file("output_test_BA.ply", structure, colors);
 
 	//以上为稀疏点云部分
 
