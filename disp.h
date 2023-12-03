@@ -24,24 +24,28 @@ void SavePointCloud(const uint8* img_bytes, const float32* disp_map, const sint3
 */
 void dispmap(Mat res, Mat ref)
 {
+	// 将传入的Mat对象分别赋值给img_left和img_right
 	cv::Mat img_left = res;
 	cv::Mat img_right = ref;
 
+	// 检查图像是否成功读取
 	if (img_left.data == nullptr || img_right.data == nullptr) {
-		std::cout <<" 读取影像失败 "<< std::endl;
+		std::cout << " 读取影像失败 " << std::endl;
 	}
+	// 检查左右影像尺寸是否一致
 	if (img_left.rows != img_right.rows || img_left.cols != img_right.cols) {
-		std::cout <<" 左右影像尺寸不一致 "<< std::endl;
+		std::cout << " 左右影像尺寸不一致 " << std::endl;
 	}
 
-
-	//···············································································//
+	// 获取图像的宽度和高度
 	const sint32 width = static_cast<uint32>(img_left.cols);
 	const sint32 height = static_cast<uint32>(img_right.rows);
 
-	// 左右影像的彩色数据
+	// 创建用于存储图像数据的字节数组
 	auto bytes_left = new uint8[width * height * 3];
 	auto bytes_right = new uint8[width * height * 3];
+
+	// 将图像数据存储到字节数组中
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			bytes_left[i * 3 * width + 3 * j] = img_left.at<cv::Vec3b>(i, j)[0];
@@ -52,63 +56,45 @@ void dispmap(Mat res, Mat ref)
 			bytes_right[i * 3 * width + 3 * j + 2] = img_right.at<cv::Vec3b>(i, j)[2];
 		}
 	}
-	printf("Done!\n");
 
-	// PMS匹配参数设计
+	// 定义PMSOption结构体并设置其参数值
 	PMSOption pms_option;
-	// patch大小
 	pms_option.patch_size = 15;
-	// gamma
 	pms_option.gamma = 10.0f;
-	// alpha
 	pms_option.alpha = 0.9f;
-	// t_col
 	pms_option.tau_col = 10.0f;
-	// t_grad
 	pms_option.tau_grad = 2.0f;
-	// 传播迭代次数
-	pms_option.num_iters = 4;
-
-	// 一致性检查
+	pms_option.num_iters = 8;
 	pms_option.is_check_lr = true;
 	pms_option.lrcheck_thres = 1.0f;
-
-	// 前端平行窗口
 	pms_option.is_fource_fpw = false;
 
-
-	// 定义PMS匹配类实例
+	// 创建PatchMatchStereo对象
 	PatchMatchStereo pms;
 
-	printf("PatchMatch Initializing...");
+	// 初始化PMS对象，并计算初始化的时间
 	auto start = std::chrono::steady_clock::now();
-	//···············································································//
-	// 初始化
 	if (!pms.Initialize(width, height, pms_option)) {
-		std::cout << " PMS初始化失败！" << std::endl;
-		
+		std::cout << " PMS初始化失败！ " << std::endl;
 	}
 	auto end = std::chrono::steady_clock::now();
 	auto tt = duration_cast<std::chrono::milliseconds>(end - start);
 	printf("Done! Timing : %lf s\n", tt.count() / 1000.0);
 
-	printf("PatchMatch Matching...");
+	// 进行视差计算，并记录计算时间
 	start = std::chrono::steady_clock::now();
-	//···············································································//
-	// 匹配
-	// disparity数组保存子像素的视差结果
 	auto disparity = new float32[uint32(width * height)]();
 	if (!pms.Match(bytes_left, bytes_right, disparity)) {
-		std::cout <<"PMS匹配失败! " << std::endl;
-		
+		std::cout << " PMS匹配失败! " << std::endl;
 	}
 	end = std::chrono::steady_clock::now();
 	tt = duration_cast<std::chrono::milliseconds>(end - start);
 	printf("Done! Timing : %lf s\n", tt.count() / 1000.0);
-	
-	// 保存点云
-	SavePointCloud(bytes_left, pms.GetDisparityMap(0), width, height,0);
 
+	// 保存点云数据
+	SavePointCloud(bytes_left, pms.GetDisparityMap(0), width, height, 0);
+
+	// 释放内存
 	delete[] disparity;
 	disparity = nullptr;
 	delete[] bytes_left;
@@ -182,52 +168,60 @@ void SaveDisparityMap(const float32* disp_map, const sint32& width, const sint32
 	cv::imwrite(path + "-c.png", disp_color);
 }
 
-void SavePointCloud(const uint8* img_bytes, const float32* disp_map, const sint32& width, const sint32& height,int i)
-{                                                                                                       //i是自己加的，感觉作用不是很大。。。                        
-	// 不同图片，参数不一样，请修改下列参数值
-	float32 B = 200.000;//基线
-	float32 f = 1000.36;//焦距
-	float32 x0l = i;		// 一图像主点x0
-	float32 y0l = 0;	// 一图像主点y0
-	float32 x0r = 350+i;// 二图像主点x0
-	i = i + 50;
-	std::cout << "Dense point cloud is being generated..."<<std::endl;
+void SavePointCloud(const uint8* img_bytes, const float32* disp_map, const sint32& width, const sint32& height, int image_main_point)
+{
+	// 常量用于点云生成
+	float32 B = 200.000; // 基线距离
+	float32 f = 1000.36; // 焦距
+	float32 x0l = image_main_point; // 左图像主点
+	float32 y0l = 0; // 左图像垂直主点
+	float32 x0r = 350 + image_main_point; // 右图像主点
+
+	// 打印状态消息
+	std::cout << " 正在生成稠密点云... " << std::endl;
+
+	// 临时向量用于存储点的位置和颜色
 	std::vector<float32> temp_pos;
 	std::vector<int> temp_color;
+
+	// 遍历图像中的每个像素
 	for (sint32 y = 0; y < height; y++) {
 		for (sint32 x = 0; x < width; x++) {
+			// 计算当前像素的视差值
 			const float32 disp = abs(disp_map[y * width + x]);
+
+			// 检查视差值是否有效
 			if (disp == Invalid_Float) {
-				continue;
+				continue; // 跳过无效的视差值
 			}
+
+			// 使用立体几何计算点的三维坐标
 			float32 Z = B * f / (disp + (x0r - x0l));
 			float32 Y = Z * (y - y0l) / f;
 			float32 X = Z * (x - x0l) / f;
 
-			// X Y Z R G B
+			// 将点的三维位置和颜色存储在临时向量中
 			temp_pos.push_back(X);
 			temp_pos.push_back(Y);
 			temp_pos.push_back(Z);
-			temp_color.push_back(static_cast<sint32>(img_bytes[y * width * 3 + 3 * x + 2]));
-			temp_color.push_back(static_cast<sint32>(img_bytes[y * width * 3 + 3 * x + 1]));
-			temp_color.push_back(static_cast<sint32>(img_bytes[y * width * 3 + 3 * x]));
+			temp_color.push_back(static_cast<sint32>(img_bytes[y * width * 3 + 3 * x + 2])); // 红色分量
+			temp_color.push_back(static_cast<sint32>(img_bytes[y * width * 3 + 3 * x + 1])); // 绿色分量
+			temp_color.push_back(static_cast<sint32>(img_bytes[y * width * 3 + 3 * x])); // 蓝色分量
 		}
-		//打印进度
 		std::system("cls");
-		std::cout << "GeneratingPointCloudFile:" << (y + 1) * width << "/" << height * width << std::endl;
+		std::cout << " 正在生成点云文件： " << (y + 1) * width << "/" << height * width << std::endl;
 		std::cout << "[";
 		for (int i = 0; i < 100; i++)
 			std::cout << ((i < 100 * (float)y / height) ? "=" : " ");
 		std::cout << "]";
 	}
 
-	std::cout << "Saving dense point cloud as PLY file..."<<std::endl;
-	// 手动输出点云ply文件
+	// 打印消息，保存稠密点云为PLY文件
+	std::cout << " 正在将稠密点云保存为PLY文件...  " << std::endl;
 	std::ofstream ply_file("./result/densePoints.ply");
-	// ply的头部信息
 	ply_file << "ply\n";
 	ply_file << "format ascii 1.0\n";
-	ply_file << "element vertex " << temp_pos.size()/3 << "\n";
+	ply_file << "element vertex " << temp_pos.size() / 3 << "\n";
 	ply_file << "property float x\n";
 	ply_file << "property float y\n";
 	ply_file << "property float z\n";
@@ -235,17 +229,15 @@ void SavePointCloud(const uint8* img_bytes, const float32* disp_map, const sint3
 	ply_file << "property uchar green\n";
 	ply_file << "property uchar blue\n";
 	ply_file << "end_header\n";
-	// 写入点云数据 
 
+	// 遍历临时向量中的点，将点的位置和颜色写入PLY文件
 	for (int i = 0; i < temp_pos.size(); i += 3)
 	{
-
-			ply_file << temp_pos[i] << " "<< temp_pos[i + 1] <<" "<< temp_pos[i + 2] << " " 
-				<< temp_color[i] << " " << temp_color[i + 1] << " " << temp_color[i + 2] << std::endl;
-		
-
+		ply_file << temp_pos[i] << " " << temp_pos[i + 1] << " " << temp_pos[i + 2] << " "
+			<< temp_color[i] << " " << temp_color[i + 1] << " " << temp_color[i + 2] << std::endl;
 	}
-	ply_file.close();
 
-	std::cout << "Saving the dense point cloud as a PLY file was successful!! End of program "<<std::endl;
+	// 关闭PLY文件，打印保存成功的消息
+	ply_file.close();
+	std::cout << " 稠密点云已成功保存为PLY文件！程序结束 " << std::endl;
 }
