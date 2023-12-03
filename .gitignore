@@ -1,0 +1,8 @@
+*.jpg
+/images
+/Viewer
+/x64
+/.vs
+*.dll
+*.ply
+*.txt
