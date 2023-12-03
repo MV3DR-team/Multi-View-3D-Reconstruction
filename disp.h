@@ -67,7 +67,7 @@ void dispmap(Mat res, Mat ref)
 	// t_grad
 	pms_option.tau_grad = 2.0f;
 	// 传播迭代次数
-	pms_option.num_iters = 1;
+	pms_option.num_iters = 4;
 
 	// 一致性检查
 	pms_option.is_check_lr = true;
@@ -194,8 +194,8 @@ void SavePointCloud(const uint8* img_bytes, const float32* disp_map, const sint3
 	std::cout << "Dense point cloud is being generated..."<<std::endl;
 	std::vector<float32> temp_pos;
 	std::vector<int> temp_color;
-	for (sint32 y = 0; y < height; y) {
-		for (sint32 x = 0; x < width; x) {
+	for (sint32 y = 0; y < height; y++) {
+		for (sint32 x = 0; x < width; x++) {
 			const float32 disp = abs(disp_map[y * width + x]);
 			if (disp == Invalid_Float) {
 				continue;
@@ -212,6 +212,13 @@ void SavePointCloud(const uint8* img_bytes, const float32* disp_map, const sint3
 			temp_color.push_back(static_cast<sint32>(img_bytes[y * width * 3 + 3 * x + 1]));
 			temp_color.push_back(static_cast<sint32>(img_bytes[y * width * 3 + 3 * x]));
 		}
+		//打印进度
+		std::system("cls");
+		std::cout << "GeneratingPointCloudFile:" << (y + 1) * width << "/" << height * width << std::endl;
+		std::cout << "[";
+		for (int i = 0; i < 100; i++)
+			std::cout << ((i < 100 * (float)y / height) ? "=" : " ");
+		std::cout << "]";
 	}
 
 	std::cout << "Saving dense point cloud as PLY file..."<<std::endl;
