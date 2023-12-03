@@ -10,12 +10,6 @@
 #define PCH_H
 
 // TODO: add headers that you want to pre-compile here
-#include <opencv2/opencv.hpp>
-#include <iostream>
-#include <random>
-#include <cmath>
-#include <ctime>
-#include <cstdlib>
 
 
 #endif //PCH_H
