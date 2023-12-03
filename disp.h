@@ -8,17 +8,17 @@ using namespace cv;
 #include <opencv2/opencv.hpp>
 #include<fstream>
 
-/*ÏÔÊ¾ÊÓ²îÍ¼*/
+/*æ˜¾ç¤ºè§†å·®å›¾*/
 void ShowDisparityMap(const float32* disp_map, const sint32& width, const sint32& height, const std::string& name);
-/*±£´æÊÓ²îÍ¼*/
+/*ä¿å­˜è§†å·®å›¾*/
 void SaveDisparityMap(const float32* disp_map, const sint32& width, const sint32& height, const std::string& path);
-/*±£´æÊÓ²îµãÔÆ*/
+/*ä¿å­˜è§†å·®ç‚¹äº‘*/
 void SavePointCloud(const uint8* img_bytes, const float32* disp_map, const sint32& width, const sint32& height,int i);
 
 /**
 * \brief
 * \param argv 3
-* \param argc argc[1]:×óÓ°ÏñÂ·¾¶ argc[2]: ÓÒÓ°ÏñÂ·¾¶ argc[3]: ×îĞ¡ÊÓ²î[¿ÉÑ¡£¬Ä¬ÈÏ0] argc[4]: ×î´óÊÓ²î[¿ÉÑ¡£¬Ä¬ÈÏ64]
+* \param argc argc[1]:å·¦å½±åƒè·¯å¾„ argc[2]: å³å½±åƒè·¯å¾„ argc[3]: æœ€å°è§†å·®[å¯é€‰ï¼Œé»˜è®¤0] argc[4]: æœ€å¤§è§†å·®[å¯é€‰ï¼Œé»˜è®¤64]
 * \param eg. ..\Data\cone\im2.png ..\Data\cone\im6.png 0 64
 * \param eg. ..\Data\Reindeer\view1.png ..\Data\Reindeer\view5.png 0 128
 * \return
@@ -32,20 +32,20 @@ void dispmap(Mat res, Mat ref)
 	cv::Mat img_right = ref;
 
 	if (img_left.data == nullptr || img_right.data == nullptr) {
-		std::cout << "¶ÁÈ¡Ó°ÏñÊ§°Ü£¡" << std::endl;
+		std::cout << "è¯»å–å½±åƒå¤±è´¥ï¼" << std::endl;
 	
 	}
 	if (img_left.rows != img_right.rows || img_left.cols != img_right.cols) {
-		std::cout << "×óÓÒÓ°Ïñ³ß´ç²»Ò»ÖÂ£¡" << std::endl;
+		std::cout << "å·¦å³å½±åƒå°ºå¯¸ä¸ä¸€è‡´ï¼" << std::endl;
 		
 	}
 
 
-	//¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤//
+	//Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·//
 	const sint32 width = static_cast<uint32>(img_left.cols);
 	const sint32 height = static_cast<uint32>(img_right.rows);
 
-	// ×óÓÒÓ°ÏñµÄ²ÊÉ«Êı¾İ
+	// å·¦å³å½±åƒçš„å½©è‰²æ•°æ®
 	auto bytes_left = new uint8[width * height * 3];
 	auto bytes_right = new uint8[width * height * 3];
 	for (int i = 0; i < height; i++) {
@@ -60,9 +60,9 @@ void dispmap(Mat res, Mat ref)
 	}
 	printf("Done!\n");
 
-	// PMSÆ¥Åä²ÎÊıÉè¼Æ
+	// PMSåŒ¹é…å‚æ•°è®¾è®¡
 	PMSOption pms_option;
-	// patch´óĞ¡
+	// patchå¤§å°
 	pms_option.patch_size = 15;
 	// gamma
 	pms_option.gamma = 10.0f;
@@ -72,28 +72,26 @@ void dispmap(Mat res, Mat ref)
 	pms_option.tau_col = 10.0f;
 	// t_grad
 	pms_option.tau_grad = 2.0f;
-	// ´«²¥µü´ú´ÎÊı
+	// ä¼ æ’­è¿­ä»£æ¬¡æ•°
 	pms_option.num_iters = 4;
 
-	// Ò»ÖÂĞÔ¼ì²é
+	// ä¸€è‡´æ€§æ£€æŸ¥
 	pms_option.is_check_lr = true;
 	pms_option.lrcheck_thres = 1.0f;
 
-	// Ç°¶ËÆ½ĞĞ´°¿Ú
+	// å‰ç«¯å¹³è¡Œçª—å£
 	pms_option.is_fource_fpw = false;
 
-	// ÕûÊıÊÓ²î¾«¶È
-	pms_option.is_integer_disp = false;
 
-	// ¶¨ÒåPMSÆ¥ÅäÀàÊµÀı
+	// å®šä¹‰PMSåŒ¹é…ç±»å®ä¾‹
 	PatchMatchStereo pms;
 
 	printf("PatchMatch Initializing...");
 	auto start = std::chrono::steady_clock::now();
-	//¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤//
-	// ³õÊ¼»¯
+	//Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·//
+	// åˆå§‹åŒ–
 	if (!pms.Initialize(width, height, pms_option)) {
-		std::cout << "PMS³õÊ¼»¯Ê§°Ü£¡" << std::endl;
+		std::cout << "PMSåˆå§‹åŒ–å¤±è´¥ï¼" << std::endl;
 		
 	}
 	auto end = std::chrono::steady_clock::now();
@@ -102,12 +100,12 @@ void dispmap(Mat res, Mat ref)
 
 	printf("PatchMatch Matching...");
 	start = std::chrono::steady_clock::now();
-	//¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤¡¤//
-	// Æ¥Åä
-	// disparityÊı×é±£´æ×ÓÏñËØµÄÊÓ²î½á¹û
+	//Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·//
+	// åŒ¹é…
+	// disparityæ•°ç»„ä¿å­˜å­åƒç´ çš„è§†å·®ç»“æœ
 	auto disparity = new float32[uint32(width * height)]();
 	if (!pms.Match(bytes_left, bytes_right, disparity)) {
-		std::cout << "PMSÆ¥ÅäÊ§°Ü£¡" << std::endl;
+		std::cout << "PMSåŒ¹é…å¤±è´¥ï¼" << std::endl;
 		
 	}
 	end = std::chrono::steady_clock::now();
@@ -119,7 +117,7 @@ void dispmap(Mat res, Mat ref)
 	
 	//SaveDisparityMap(pms.GetDisparityMap(0), width, height, path_left);
 	
-	// ±£´æµãÔÆ
+	// ä¿å­˜ç‚¹äº‘
 	SavePointCloud(bytes_left, pms.GetDisparityMap(0), width, height,0);
 
 	
@@ -133,7 +131,7 @@ void dispmap(Mat res, Mat ref)
 
 void ShowDisparityMap(const float32* disp_map, const sint32& width, const sint32& height, const std::string& name)
 {
-	// ÏÔÊ¾ÊÓ²îÍ¼
+	// æ˜¾ç¤ºè§†å·®å›¾
 	const cv::Mat disp_mat = cv::Mat(height, width, CV_8UC1);
 	float32 min_disp = float32(width), max_disp = -float32(width);
 	for (sint32 i = 0; i < height; i++) {
@@ -166,7 +164,7 @@ void ShowDisparityMap(const float32* disp_map, const sint32& width, const sint32
 
 void SaveDisparityMap(const float32* disp_map, const sint32& width, const sint32& height, const std::string& path)
 {
-	// ±£´æÊÓ²îÍ¼
+	// ä¿å­˜è§†å·®å›¾
 	const cv::Mat disp_mat = cv::Mat(height, width, CV_8UC1);
 	float32 min_disp = float32(width), max_disp = -float32(width);
 	for (sint32 i = 0; i < height; i++) {
@@ -197,17 +195,17 @@ void SaveDisparityMap(const float32* disp_map, const sint32& width, const sint32
 }
 
 void SavePointCloud(const uint8* img_bytes, const float32* disp_map, const sint32& width, const sint32& height,int i)
-{                                                                                                       //iÊÇ×Ô¼º¼ÓµÄ£¬¸Ğ¾õ×÷ÓÃ²»ÊÇºÜ´ó¡£¡£¡£                        
-	// ²»Í¬Í¼Æ¬£¬²ÎÊı²»Ò»Ñù£¬ÇëĞŞ¸ÄÏÂÁĞ²ÎÊıÖµ
-	float32 B = 200.000;//»ùÏß
-	float32 f = 1000.36;//½¹¾à
-	float32 x0l = i;		// Ò»Í¼ÏñÖ÷µãx0
-	float32 y0l = 0;	// Ò»Í¼ÏñÖ÷µãy0
-	float32 x0r = 350+i;// ¶şÍ¼ÏñÖ÷µãx0
+{                                                                                                       //iæ˜¯è‡ªå·±åŠ çš„ï¼Œæ„Ÿè§‰ä½œç”¨ä¸æ˜¯å¾ˆå¤§ã€‚ã€‚ã€‚                        
+	// ä¸åŒå›¾ç‰‡ï¼Œå‚æ•°ä¸ä¸€æ ·ï¼Œè¯·ä¿®æ”¹ä¸‹åˆ—å‚æ•°å€¼
+	float32 B = 200.000;//åŸºçº¿
+	float32 f = 1000.36;//ç„¦è·
+	float32 x0l = i;		// ä¸€å›¾åƒä¸»ç‚¹x0
+	float32 y0l = 0;	// ä¸€å›¾åƒä¸»ç‚¹y0
+	float32 x0r = 350+i;// äºŒå›¾åƒä¸»ç‚¹x0
 	i = i + 50;
 
 	/*
-	// ±£´æµãÔÆ
+	// ä¿å­˜ç‚¹äº‘
 	FILE* fp_disp_cloud;
 	fopen_s(&fp_disp_cloud, "OPcloud.txt", "a");
 	if (fp_disp_cloud) {
@@ -228,10 +226,10 @@ void SavePointCloud(const uint8* img_bytes, const float32* disp_map, const sint3
 		fclose(fp_disp_cloud);
 	}*/
 
-	// ÊÖ¶¯Êä³öµãÔÆplyÎÄ¼ş
+	// æ‰‹åŠ¨è¾“å‡ºç‚¹äº‘plyæ–‡ä»¶
 	std::ofstream ply_file("densePoints.ply");
 
-	// plyµÄÍ·²¿ĞÅÏ¢
+	// plyçš„å¤´éƒ¨ä¿¡æ¯
 	ply_file << "ply\n";
 	ply_file << "format ascii 1.0\n";
 	ply_file << "element vertex " << (height/3) * (width/3) << "\n";
@@ -242,7 +240,7 @@ void SavePointCloud(const uint8* img_bytes, const float32* disp_map, const sint3
 	ply_file << "property uchar green\n";
 	ply_file << "property uchar blue\n";
 	ply_file << "end_header\n";
-	// Ğ´ÈëµãÔÆÊı¾İ
+	// å†™å…¥ç‚¹äº‘æ•°æ®
 	for (sint32 y = 0; y < height; y+=3) {
 		for (sint32 x = 0; x < width; x+=3) {
 			const float32 disp = abs(disp_map[y * width + x]);

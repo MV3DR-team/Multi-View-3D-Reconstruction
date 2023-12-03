@@ -15,7 +15,7 @@ PMSPropagation::PMSPropagation(const sint32 width, const sint32 height, const ui
 	cost_left_(cost_left), cost_right_(cost_right),
 	disparity_map_(disparity_map)
 {
-	// ´ú¼Û¼ÆËãÆ÷
+	// ä»£ä»·è®¡ç®—å™¨
 	cost_cpt_left_ = new CostComputerPMS(img_left, img_right, grad_left, grad_right, width, height,
 		option.patch_size, option.min_disparity, option.max_disparity, option.gamma,
 		option.alpha, option.tau_col, option.tau_grad);
@@ -24,11 +24,11 @@ PMSPropagation::PMSPropagation(const sint32 width, const sint32 height, const ui
 		option.alpha, option.tau_col, option.tau_grad);
 	option_ = option;
 
-	// Ëæ»úÊıÉú³ÉÆ÷
+	// éšæœºæ•°ç”Ÿæˆå™¨
 	rand_disp_ = new std::uniform_real_distribution<float32>(-1.0f, 1.0f);
 	rand_norm_ = new std::uniform_real_distribution<float32>(-1.0f, 1.0f);
 
-	// ¼ÆËã³õÊ¼´ú¼ÛÊı¾İ
+	// è®¡ç®—åˆå§‹ä»£ä»·æ•°æ®
 	ComputeCostData();
 }
 
@@ -59,23 +59,23 @@ void PMSPropagation::DoPropagation()
 		return;
 	}
 
-	// Å¼Êı´Îµü´ú´Ó×óÉÏµ½ÓÒÏÂ´«²¥
-	// ÆæÊı´Îµü´ú´ÓÓÒÏÂµ½×óÉÏ´«²¥
+	// å¶æ•°æ¬¡è¿­ä»£ä»å·¦ä¸Šåˆ°å³ä¸‹ä¼ æ’­
+	// å¥‡æ•°æ¬¡è¿­ä»£ä»å³ä¸‹åˆ°å·¦ä¸Šä¼ æ’­
 	const sint32 dir = (num_iter_ % 2 == 0) ? 1 : -1;
 	sint32 y = (dir == 1) ? 0 : height_ - 1;
 	for (sint32 i = 0; i < height_; i++) {
 		sint32 x = (dir == 1) ? 0 : width_ - 1;
 		for (sint32 j = 0; j < width_; j++) {
 
-			// ¿Õ¼ä´«²¥
+			// ç©ºé—´ä¼ æ’­
 			SpatialPropagation(x, y, dir);
 
-			// Æ½ÃæÓÅ»¯
+			// å¹³é¢ä¼˜åŒ–
 			if (!option_.is_fource_fpw) {
 				PlaneRefine(x, y);
 			}
 
-			// ÊÓÍ¼´«²¥
+			// è§†å›¾ä¼ æ’­
 			ViewPropagation(x, y);
 
 			x += dir;
@@ -103,18 +103,18 @@ void PMSPropagation::ComputeCostData() const
 void PMSPropagation::SpatialPropagation(const sint32& x, const sint32& y, const sint32& direction) const
 {
 	// ---
-	// ¿Õ¼ä´«²¥
+	// ç©ºé—´ä¼ æ’­
 
-	// Å¼Êı´Îµü´ú´Ó×óÉÏµ½ÓÒÏÂ´«²¥
-	// ÆæÊı´Îµü´ú´ÓÓÒÏÂµ½×óÉÏ´«²¥
+	// å¶æ•°æ¬¡è¿­ä»£ä»å·¦ä¸Šåˆ°å³ä¸‹ä¼ æ’­
+	// å¥‡æ•°æ¬¡è¿­ä»£ä»å³ä¸‹åˆ°å·¦ä¸Šä¼ æ’­
 	const sint32 dir = direction;
 
-	// »ñÈ¡pµ±Ç°µÄÊÓ²îÆ½Ãæ²¢¼ÆËã´ú¼Û
+	// è·å–på½“å‰çš„è§†å·®å¹³é¢å¹¶è®¡ç®—ä»£ä»·
 	auto& plane_p = plane_left_[y * width_ + x];
 	auto& cost_p = cost_left_[y * width_ + x];
 	auto* cost_cpt = dynamic_cast<CostComputerPMS*>(cost_cpt_left_);
 
-	// »ñÈ¡p×ó(ÓÒ)²àÏñËØµÄÊÓ²îÆ½Ãæ£¬¼ÆËã½«Æ½Ãæ·ÖÅä¸øpÊ±µÄ´ú¼Û£¬È¡½ÏĞ¡Öµ
+	// è·å–på·¦(å³)ä¾§åƒç´ çš„è§†å·®å¹³é¢ï¼Œè®¡ç®—å°†å¹³é¢åˆ†é…ç»™pæ—¶çš„ä»£ä»·ï¼Œå–è¾ƒå°å€¼
 	const sint32 xd = x - dir;
 	if (xd >= 0 && xd < width_) {
 		auto& plane = plane_left_[y * width_ + xd];
@@ -127,7 +127,7 @@ void PMSPropagation::SpatialPropagation(const sint32& x, const sint32& y, const 
 		}
 	}
 
-	// »ñÈ¡pÉÏ(ÏÂ)²àÏñËØµÄÊÓ²îÆ½Ãæ£¬¼ÆËã½«Æ½Ãæ·ÖÅä¸øpÊ±µÄ´ú¼Û£¬È¡½ÏĞ¡Öµ
+	// è·å–pä¸Š(ä¸‹)ä¾§åƒç´ çš„è§†å·®å¹³é¢ï¼Œè®¡ç®—å°†å¹³é¢åˆ†é…ç»™pæ—¶çš„ä»£ä»·ï¼Œå–è¾ƒå°å€¼
 	const sint32 yd = y - dir;
 	if (yd >= 0 && yd < height_) {
 		auto& plane = plane_left_[yd * width_ + x];
@@ -144,17 +144,17 @@ void PMSPropagation::SpatialPropagation(const sint32& x, const sint32& y, const 
 void PMSPropagation::ViewPropagation(const sint32& x, const sint32& y) const
 {
 	// --
-	// ÊÓÍ¼´«²¥
-	// ËÑË÷pÔÚÓÒÊÓÍ¼µÄÍ¬Ãûµãq£¬¸üĞÂqµÄÆ½Ãæ
+	// è§†å›¾ä¼ æ’­
+	// æœç´¢påœ¨å³è§†å›¾çš„åŒåç‚¹qï¼Œæ›´æ–°qçš„å¹³é¢
 
-	// ×óÊÓÍ¼Æ¥ÅäµãpµÄÎ»ÖÃ¼°ÆäÊÓ²îÆ½Ãæ 
+	// å·¦è§†å›¾åŒ¹é…ç‚¹pçš„ä½ç½®åŠå…¶è§†å·®å¹³é¢ 
 	const sint32 p = y * width_ + x;
 	const auto& plane_p = plane_left_[p];
 	auto* cost_cpt = dynamic_cast<CostComputerPMS*>(cost_cpt_right_);
 
 	const float32 d_p = plane_p.to_disparity(x, y);
 
-	// ¼ÆËãÓÒÊÓÍ¼ÁĞºÅ
+	// è®¡ç®—å³è§†å›¾åˆ—å·
 	const sint32 xr = lround(x - d_p);
 	if (xr < 0 || xr >= width_) {
 		return;
@@ -164,7 +164,7 @@ void PMSPropagation::ViewPropagation(const sint32& x, const sint32& y) const
 	auto& plane_q = plane_right_[q];
 	auto& cost_q = cost_right_[q];
 
-	// ½«×óÊÓÍ¼µÄÊÓ²îÆ½Ãæ×ª»»µ½ÓÒÊÓÍ¼
+	// å°†å·¦è§†å›¾çš„è§†å·®å¹³é¢è½¬æ¢åˆ°å³è§†å›¾
 	const auto plane_p2q = plane_p.to_another_view(x, y);
 	const float32 d_q = plane_p2q.to_disparity(xr, y);
 	const auto cost = cost_cpt->ComputeA(xr, y, plane_p2q);
@@ -177,17 +177,17 @@ void PMSPropagation::ViewPropagation(const sint32& x, const sint32& y) const
 void PMSPropagation::PlaneRefine(const sint32& x, const sint32& y) const
 {
 	// --
-	// Æ½ÃæÓÅ»¯
+	// å¹³é¢ä¼˜åŒ–
 	const auto max_disp = static_cast<float32>(option_.max_disparity);
 	const auto min_disp = static_cast<float32>(option_.min_disparity);
 
-	// Ëæ»úÊıÉú³ÉÆ÷
+	// éšæœºæ•°ç”Ÿæˆå™¨
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	const auto& rand_d = *rand_disp_;
 	const auto& rand_n = *rand_norm_;
 	std::exponential_distribution<> exp(1.0);
-	// ÏñËØpµÄÆ½Ãæ¡¢´ú¼Û¡¢ÊÓ²î¡¢·¨Ïß
+	// åƒç´ pçš„å¹³é¢ã€ä»£ä»·ã€è§†å·®ã€æ³•çº¿
 	auto& plane_p = plane_left_[y * width_ + x];
 	auto& cost_p = cost_left_[y * width_ + x];
 	auto* cost_cpt = dynamic_cast<CostComputerPMS*>(cost_cpt_left_);
@@ -199,16 +199,13 @@ void PMSPropagation::PlaneRefine(const sint32& x, const sint32& y) const
 	float32 norm_update = 1.0f;
 	const float32 stop_thres = 0.1f;
 
-	// µü´úÓÅ»¯
+	// è¿­ä»£ä¼˜åŒ–
 	while (disp_update > stop_thres) {
 
-		// ÔÚ -disp_update ~ disp_update ·¶Î§ÄÚËæ»úÒ»¸öÊÓ²îÔöÁ¿
+		// åœ¨ -disp_update ~ disp_update èŒƒå›´å†…éšæœºä¸€ä¸ªè§†å·®å¢é‡
 		float32 disp_rd = exp(gen) * disp_update;
-		if (option_.is_integer_disp) {
-			disp_rd = static_cast<float32>(round(disp_rd));
-		}
 
-		// ¼ÆËãÏñËØpĞÂµÄÊÓ²î
+		// è®¡ç®—åƒç´ pæ–°çš„è§†å·®
 		const float32 d_p_new = d_p + disp_rd;
 		if (d_p_new < min_disp || d_p_new > max_disp) {
 			disp_update /= 2;
@@ -216,7 +213,7 @@ void PMSPropagation::PlaneRefine(const sint32& x, const sint32& y) const
 			continue;
 		}
 
-		// ÔÚ -norm_update ~ norm_update ·¶Î§ÄÚËæ»úÈı¸öÖµ×÷Îª·¨ÏßÔöÁ¿µÄÈı¸ö·ÖÁ¿
+		// åœ¨ -norm_update ~ norm_update èŒƒå›´å†…éšæœºä¸‰ä¸ªå€¼ä½œä¸ºæ³•çº¿å¢é‡çš„ä¸‰ä¸ªåˆ†é‡
 		PVector3f norm_rd;
 		if (!option_.is_fource_fpw) {
 			norm_rd.x = exp(gen) * norm_update;
@@ -231,14 +228,14 @@ void PMSPropagation::PlaneRefine(const sint32& x, const sint32& y) const
 			norm_rd.x = 0.0f; norm_rd.y = 0.0f;	norm_rd.z = 0.0f;
 		}
 
-		// ¼ÆËãÏñËØpĞÂµÄ·¨Ïß
+		// è®¡ç®—åƒç´ pæ–°çš„æ³•çº¿
 		auto norm_p_new = norm_p + norm_rd;
 		norm_p_new.normalize();
 
-		// ¼ÆËãĞÂµÄÊÓ²îÆ½Ãæ
+		// è®¡ç®—æ–°çš„è§†å·®å¹³é¢
 		auto plane_new = DisparityPlane(x, y, norm_p_new, d_p_new);
 
-		// ±È½ÏCost
+		// æ¯”è¾ƒCost
 		if (plane_new != plane_p) {
 			const float32 cost = cost_cpt->ComputeA(x, y, plane_new);
 

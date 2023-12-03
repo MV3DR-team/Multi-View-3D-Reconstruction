@@ -219,9 +219,6 @@ void PatchMatchStereo::RandomInitialization() const
 				const sint32 p = y * width + x;
 				// 随机视差值
 				float32 disp = sign * exp(gen);
-				if (option.is_integer_disp) {
-					disp = static_cast<float32>(round(disp));
-				}
 				disp_ptr[p] = disp;
 
 				// 随机法向量
