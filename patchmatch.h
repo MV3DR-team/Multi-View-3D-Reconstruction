@@ -1,13 +1,24 @@
 #pragma once
 #include "pch.h"
 #include "metric.h"
-#include "util.h"
 #include "disp.h"
 #include "struct.h"
 
-
 using namespace cv;
 using namespace std;
+
+float random_range1(float min, float max) {
+	if (min > max) { int t = min; min = max; max = t; }
+	float f = (rand() % 65537) * 1.0f / 65537.0f;
+	return f * (max - min) + min;
+}
+
+int argmax1(double v[], int n) {
+	int max_i = 0;
+	for (int i = 1; i < n; i++)
+		if (v[i] > v[max_i]) max_i = i;
+	return max_i;
+}
 
 #define CHANNEL_TYPE Vec3b
 
@@ -37,8 +48,8 @@ void initialize(Vector3i& f, int n_rows_dst, int n_cols_dst, int n_rows_ref, int
 
 	for (int i = 0; i < n_rows_dst; i++) {
 		for (int j = 0; j < n_cols_dst; j++) {
-			f[i][j][0] = int(util::random_range1(0, n_rows_ref - patch_size)) - i + patch_size / 2;
-			f[i][j][1] = int(util::random_range1(0, n_cols_ref - patch_size)) - j + patch_size / 2;
+			f[i][j][0] = int(random_range1(0, n_rows_ref - patch_size)) - i + patch_size / 2;
+			f[i][j][1] = int(random_range1(0, n_cols_ref - patch_size)) - j + patch_size / 2;
 		}
 	}
 
@@ -125,7 +136,7 @@ void patchmatch(Vector3i& f, Mat& img_dst, Mat& img_ref, int patch_size, int n_i
 				}
 				else sm[2] = -1e16f;
 
-				int k = util::argmax1(sm, 3);
+				int k = argmax1(sm, 3);
 				v[i][j] = sm[k];
 
 				switch (k) {
@@ -143,16 +154,16 @@ void patchmatch(Vector3i& f, Mat& img_dst, Mat& img_ref, int patch_size, int n_i
 				int r_ws = n_rows_ref, c_ws = n_cols_ref;
 				float alpha = 0.5f, exp = 0.5f;
 				while (r_ws * alpha > 1 && c_ws * alpha > 1) {
-					int rmin = util::max(0, int(i + f[i][j][0] - r_ws * alpha)) + patch_size / 2;
-					int rmax = util::min(int(i + f[i][j][0] + r_ws * alpha), n_rows_ref - patch_size) + patch_size / 2;
-					int cmin = util::max(0, int(j + f[i][j][1] - c_ws * alpha)) + patch_size / 2;
-					int cmax = util::min(int(j + f[i][j][1] + c_ws * alpha), n_cols_ref - patch_size) + patch_size / 2;
+					int rmin = max(0, int(i + f[i][j][0] - r_ws * alpha)) + patch_size / 2;
+					int rmax = min(int(i + f[i][j][0] + r_ws * alpha), n_rows_ref - patch_size) + patch_size / 2;
+					int cmin = max(0, int(j + f[i][j][1] - c_ws * alpha)) + patch_size / 2;
+					int cmax = min(int(j + f[i][j][1] + c_ws * alpha), n_cols_ref - patch_size) + patch_size / 2;
 
 					if (rmin > rmax) rmin = rmax = f[i][j][0] + i;
 					if (cmin > cmax) cmin = cmax = f[i][j][1] + j;
 
-					int r_offset = int(util::random_range1(rmin, rmax)) - i;
-					int c_offset = int(util::random_range1(cmin, cmax)) - j;
+					int r_offset = int(random_range1(rmin, rmax)) - i;
+					int c_offset = int(random_range1(cmin, cmax)) - j;
 
 					Mat patch = pick_patch(img_dst, i, j, 0, 0, patch_size);
 					Mat cand = pick_patch(img_ref, i, j, r_offset, c_offset, patch_size);

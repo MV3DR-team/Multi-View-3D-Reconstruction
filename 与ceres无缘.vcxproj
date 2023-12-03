@@ -152,7 +152,6 @@
     <ClInclude Include="pmstereo.h" />
     <ClInclude Include="propagation.h" />
     <ClInclude Include="struct.h" />
-    <ClInclude Include="util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
