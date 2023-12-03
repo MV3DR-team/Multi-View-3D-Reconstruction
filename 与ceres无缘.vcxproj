@@ -139,7 +139,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp" />
     <ClCompile Include="pmstereo.cpp" />
     <ClCompile Include="propagation.cpp" />
     <ClCompile Include="main.cpp" />
