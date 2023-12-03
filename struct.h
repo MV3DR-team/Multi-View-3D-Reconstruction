@@ -11,49 +11,51 @@ using std::pair;
 #define SAFE_DELETE(P) {if(P) delete[](P);(P)=nullptr;}
 #endif
 
-/** \brief åŸºç¡€ç±»å‹åˆ«å */
-typedef int8_t			sint8;		// æœ‰ç¬¦å·8ä½æ•´æ•°
-typedef uint8_t			uint8;		// æ— ç¬¦å·8ä½æ•´æ•°
-typedef int16_t			sint16;		// æœ‰ç¬¦å·16ä½æ•´æ•°
-typedef uint16_t		uint16;		// æ— ç¬¦å·16ä½æ•´æ•°
-typedef int32_t			sint32;		// æœ‰ç¬¦å·32ä½æ•´æ•°
-typedef uint32_t		uint32;		// æ— ç¬¦å·32ä½æ•´æ•°
-typedef int64_t			sint64;		// æœ‰ç¬¦å·64ä½æ•´æ•°
-typedef uint64_t		uint64;		// æ— ç¬¦å·64ä½æ•´æ•°
-typedef float			float32;	// å•ç²¾åº¦æµ®ç‚¹
-typedef double			float64;	// åŒç²¾åº¦æµ®ç‚¹
+/** \brief »ù´¡ÀàĞÍ±ğÃû */
+typedef int8_t			sint8;		// ÓĞ·ûºÅ8Î»ÕûÊı
+typedef uint8_t			uint8;		// ÎŞ·ûºÅ8Î»ÕûÊı
+typedef int16_t			sint16;		// ÓĞ·ûºÅ16Î»ÕûÊı
+typedef uint16_t		uint16;		// ÎŞ·ûºÅ16Î»ÕûÊı
+typedef int32_t			sint32;		// ÓĞ·ûºÅ32Î»ÕûÊı
+typedef uint32_t		uint32;		// ÎŞ·ûºÅ32Î»ÕûÊı
+typedef int64_t			sint64;		// ÓĞ·ûºÅ64Î»ÕûÊı
+typedef uint64_t		uint64;		// ÎŞ·ûºÅ64Î»ÕûÊı
+typedef float			float32;	// µ¥¾«¶È¸¡µã
+typedef double			float64;	// Ë«¾«¶È¸¡µã
 
 constexpr auto Invalid_Float = std::numeric_limits<float32>::infinity();
-/** \brief float32æ— æ•ˆå€¼ */
+/** \brief float32ÎŞĞ§Öµ */
 
-/** \brief PMSå‚æ•°ç»“æ„ä½“ */
+/** \brief PMS²ÎÊı½á¹¹Ìå */
 struct PMSOption {
-	sint32	patch_size;			// patchå°ºå¯¸ï¼Œå±€éƒ¨çª—å£ä¸º patch_size*patch_size
-	sint32  min_disparity;		// æœ€å°è§†å·®
-	sint32	max_disparity;		// æœ€å¤§è§†å·®
+	sint32	patch_size;			// patch³ß´ç£¬¾Ö²¿´°¿ÚÎª patch_size*patch_size
+	sint32  min_disparity;		// ×îĞ¡ÊÓ²î
+	sint32	max_disparity;		// ×î´óÊÓ²î
 
-	float32	gamma;				// gamma æƒå€¼å› å­
-	float32	alpha;				// alpha ç›¸ä¼¼åº¦å¹³è¡¡å› å­
-	float32	tau_col;			// tau for color	ç›¸ä¼¼åº¦è®¡ç®—é¢œè‰²ç©ºé—´çš„ç»å¯¹å·®çš„ä¸‹æˆªæ–­é˜ˆå€¼
-	float32	tau_grad;			// tau for gradient ç›¸ä¼¼åº¦è®¡ç®—æ¢¯åº¦ç©ºé—´çš„ç»å¯¹å·®ä¸‹æˆªæ–­é˜ˆå€¼
+	float32	gamma;				// gamma È¨ÖµÒò×Ó
+	float32	alpha;				// alpha ÏàËÆ¶ÈÆ½ºâÒò×Ó
+	float32	tau_col;			// tau for color	ÏàËÆ¶È¼ÆËãÑÕÉ«¿Õ¼äµÄ¾ø¶Ô²îµÄÏÂ½Ø¶ÏãĞÖµ
+	float32	tau_grad;			// tau for gradient ÏàËÆ¶È¼ÆËãÌİ¶È¿Õ¼äµÄ¾ø¶Ô²îÏÂ½Ø¶ÏãĞÖµ
 
-	sint32	num_iters;			// ä¼ æ’­è¿­ä»£æ¬¡æ•°
+	sint32	num_iters;			// ´«²¥µü´ú´ÎÊı
 
-	bool	is_check_lr;		// æ˜¯å¦æ£€æŸ¥å·¦å³ä¸€è‡´æ€§
-	float32	lrcheck_thres;		// å·¦å³ä¸€è‡´æ€§çº¦æŸé˜ˆå€¼
+	bool	is_check_lr;		// ÊÇ·ñ¼ì²é×óÓÒÒ»ÖÂĞÔ
+	float32	lrcheck_thres;		// ×óÓÒÒ»ÖÂĞÔÔ¼ÊøãĞÖµ
 
-	bool	is_fource_fpw;		// æ˜¯å¦å¼ºåˆ¶ä¸ºFrontal-Parallel Window
-	bool	is_integer_disp;	// æ˜¯å¦ä¸ºæ•´åƒç´ è§†å·®
+	bool	is_fill_holes;		// ÊÇ·ñÌî³äÊÓ²î¿Õ¶´
+
+	bool	is_fource_fpw;		// ÊÇ·ñÇ¿ÖÆÎªFrontal-Parallel Window
+	bool	is_integer_disp;	// ÊÇ·ñÎªÕûÏñËØÊÓ²î
 
 	PMSOption() : patch_size(35), min_disparity(0), max_disparity(64), gamma(10.0f), alpha(0.9f), tau_col(10.0f),
 		tau_grad(2.0f), num_iters(3),
 		is_check_lr(false),
 		lrcheck_thres(0),
-		is_fource_fpw(false), is_integer_disp(false) { }
+		is_fill_holes(false), is_fource_fpw(false), is_integer_disp(false) { }
 };
 
 /**
- * \brief é¢œè‰²ç»“æ„ä½“
+ * \brief ÑÕÉ«½á¹¹Ìå
  */
 struct PColor {
 	uint8 r, g, b;
@@ -63,7 +65,7 @@ struct PColor {
 	}
 };
 /**
- * \brief æ¢¯åº¦ç»“æ„ä½“
+ * \brief Ìİ¶È½á¹¹Ìå
  */
 struct PGradient {
 	sint16 x, y;
@@ -74,7 +76,7 @@ struct PGradient {
 };
 
 /**
-* \brief äºŒç»´çŸ¢é‡ç»“æ„ä½“
+* \brief ¶şÎ¬Ê¸Á¿½á¹¹Ìå
 */
 struct PVector2f {
 
@@ -91,7 +93,7 @@ struct PVector2f {
 		x = v.x; y = v.y;
 	}
 
-	// Â·Â·Â·operators
+	// ¡¤¡¤¡¤operators
 	// operator +
 	PVector2f operator+(const PVector2f& v) const {
 		return PVector2f(x + v.x, y + v.y);
@@ -117,7 +119,7 @@ struct PVector2f {
 };
 
 /**
-* \brief ä¸‰ç»´çŸ¢é‡ç»“æ„ä½“
+* \brief ÈıÎ¬Ê¸Á¿½á¹¹Ìå
 */
 struct PVector3f {
 
@@ -146,7 +148,7 @@ struct PVector3f {
 		}
 	}
 
-	// Â·Â·Â·operators
+	// ¡¤¡¤¡¤operators
 	// operator +
 	PVector3f operator+(const PVector3f& v) const {
 		return PVector3f(x + v.x, y + v.y, z + v.z);
@@ -190,7 +192,7 @@ typedef  PVector3f PPoint3f;
 
 
 /**
- * \brief è§†å·®å¹³é¢
+ * \brief ÊÓ²îÆ½Ãæ
  */
 struct DisparityPlane {
 	PVector3f p;
@@ -205,17 +207,17 @@ struct DisparityPlane {
 	}
 
 	/**
-	 * \brief è·å–è¯¥å¹³é¢ä¸‹åƒç´ (x,y)çš„è§†å·®
-	 * \param x		åƒç´ xåæ ‡
-	 * \param y		åƒç´ yåæ ‡
-	 * \return åƒç´ (x,y)çš„è§†å·®
+	 * \brief »ñÈ¡¸ÃÆ½ÃæÏÂÏñËØ(x,y)µÄÊÓ²î
+	 * \param x		ÏñËØx×ø±ê
+	 * \param y		ÏñËØy×ø±ê
+	 * \return ÏñËØ(x,y)µÄÊÓ²î
 	 */
 	float32 to_disparity(const sint32& x, const sint32& y) const
 	{
 		return p.dot(PVector3f(float32(x), float32(y), 1.0f));
 	}
 
-	/** \brief è·å–å¹³é¢çš„æ³•çº¿ */
+	/** \brief »ñÈ¡Æ½ÃæµÄ·¨Ïß */
 	PVector3f to_normal() const
 	{
 		PVector3f n(p.x, p.y, -1.0f);
@@ -224,14 +226,14 @@ struct DisparityPlane {
 	}
 
 	/**
-	 * \brief å°†è§†å·®å¹³é¢è½¬æ¢åˆ°å¦ä¸€è§†å›¾
-	 * å‡è®¾å·¦è§†å›¾å¹³é¢æ–¹ç¨‹ä¸º d = a_p*xl + b_p*yl + c_p
-	 * å·¦å³è§†å›¾æ»¡è¶³ï¼š(1) xr = xl - d_p; (2) yr = yl; (3) è§†å·®ç¬¦å·ç›¸å(æœ¬ä»£ç å·¦è§†å·®ä¸ºæ­£å€¼ï¼Œå³è§†å·®ä¸ºè´Ÿå€¼)
-	 * ä»£å…¥å·¦è§†å›¾è§†å·®å¹³é¢æ–¹ç¨‹å°±å¯å¾—åˆ°å³è§†å›¾åæ ‡ç³»ä¸‹çš„å¹³é¢æ–¹ç¨‹: d = a_p/(a_p-1)*xr + b_p/(a_p-1)*yr + c_p/(a_p-1)
-	 * å³è‡³å·¦åŒç†
-	 * \param x		åƒç´ xåæ ‡
-	 * \param y 	åƒç´ yåæ ‡
-	 * \return è½¬æ¢åçš„å¹³é¢
+	 * \brief ½«ÊÓ²îÆ½Ãæ×ª»»µ½ÁíÒ»ÊÓÍ¼
+	 * ¼ÙÉè×óÊÓÍ¼Æ½Ãæ·½³ÌÎª d = a_p*xl + b_p*yl + c_p
+	 * ×óÓÒÊÓÍ¼Âú×ã£º(1) xr = xl - d_p; (2) yr = yl; (3) ÊÓ²î·ûºÅÏà·´(±¾´úÂë×óÊÓ²îÎªÕıÖµ£¬ÓÒÊÓ²îÎª¸ºÖµ)
+	 * ´úÈë×óÊÓÍ¼ÊÓ²îÆ½Ãæ·½³Ì¾Í¿ÉµÃµ½ÓÒÊÓÍ¼×ø±êÏµÏÂµÄÆ½Ãæ·½³Ì: d = a_p/(a_p-1)*xr + b_p/(a_p-1)*yr + c_p/(a_p-1)
+	 * ÓÒÖÁ×óÍ¬Àí
+	 * \param x		ÏñËØx×ø±ê
+	 * \param y 	ÏñËØy×ø±ê
+	 * \return ×ª»»ºóµÄÆ½Ãæ
 	 */
 	DisparityPlane to_another_view(const sint32& x, const sint32& y) const
 	{

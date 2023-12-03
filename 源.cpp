@@ -11,13 +11,6 @@
 #include "patchmatch.h"
 #include <stdio.h>
 #include <fstream>
-#include <opencv2/opencv.hpp>
-#include <random>
-#include <cmath>
-#include <ctime>
-#include <cstdlib>
-
-
 /*图片请用png格式~~~*/
 using namespace cv;
 using namespace std;
