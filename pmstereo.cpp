@@ -1,12 +1,7 @@
-//#include "stdafx.h"
 #include "pmstereo.h"
 #include <ctime>
 #include <random>
 #include "propagation.h"
-
-
-
-
 
 PatchMatchStereo::PatchMatchStereo() : width_(0), height_(0), img_left_(nullptr), img_right_(nullptr),
 gray_left_(nullptr), gray_right_(nullptr),

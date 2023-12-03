@@ -1,5 +1,4 @@
 #pragma once
-//#include "stdafx.h"
 #include <iostream>
 #include "pmstereo.h"
 #include <chrono>
@@ -25,9 +24,6 @@ void SavePointCloud(const uint8* img_bytes, const float32* disp_map, const sint3
 */
 void dispmap(Mat res, Mat ref)
 {
-
-
-
 	cv::Mat img_left = res;
 	cv::Mat img_right = ref;
 
@@ -109,16 +105,10 @@ void dispmap(Mat res, Mat ref)
 	end = std::chrono::steady_clock::now();
 	tt = duration_cast<std::chrono::milliseconds>(end - start);
 	printf("Done! Timing : %lf s\n", tt.count() / 1000.0);
-
-
-
-	
-	//SaveDisparityMap(pms.GetDisparityMap(0), width, height, path_left);
 	
 	// 保存点云
 	SavePointCloud(bytes_left, pms.GetDisparityMap(0), width, height,0);
 
-	
 	delete[] disparity;
 	disparity = nullptr;
 	delete[] bytes_left;
@@ -202,28 +192,6 @@ void SavePointCloud(const uint8* img_bytes, const float32* disp_map, const sint3
 	float32 x0r = 350+i;// 二图像主点x0
 	i = i + 50;
 
-	/*
-	// 保存点云
-	FILE* fp_disp_cloud;
-	fopen_s(&fp_disp_cloud, "OPcloud.txt", "a");
-	if (fp_disp_cloud) {
-		for (sint32 y = 0; y < height; y++) {
-			for (sint32 x = 0; x < width; x++) {
-				const float32 disp = abs(disp_map[y * width + x]);
-				if (disp == Invalid_Float) {
-					continue;
-				}
-				float32 Z = B * f / (disp + (x0r - x0l));
-				float32 X = Z * (x - x0l) / f;
-				float32 Y = Z * (y - y0l) / f;
-				// X Y Z R G B
-				fprintf_s(fp_disp_cloud, "%f %f %f %d %d %d\n", X, Y,
-					Z, img_bytes[y * width * 3 + 3 * x + 2], img_bytes[y * width * 3 + 3 * x + 1], img_bytes[y * width * 3 + 3 * x]);
-			}
-		}
-		fclose(fp_disp_cloud);
-	}*/
-
 	// 手动输出点云ply文件
 	std::ofstream ply_file("densePoints.ply");
 
@@ -257,5 +225,4 @@ void SavePointCloud(const uint8* img_bytes, const float32* disp_map, const sint3
 	}
 
 	ply_file.close();
-
 }

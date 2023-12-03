@@ -22,12 +22,10 @@ int argmax1(double v[], int n) {
 
 #define CHANNEL_TYPE Vec3b
 
-// double(*sim)(Mat&, Mat&, int) = metric::sim_abs_diff;  //metric::ssim;
 double(*sim)(Mat&, Mat&, int) = metric::sim_diff_dxy<CHANNEL_TYPE>;  //metric::ssim;
 
 typedef vector < vector < vector<int> > >	Vector3i;
 typedef vector < vector <int> >				Vector2i;
-
 
 void reconstruct(Vector3i& f, Mat& dst, Mat& ref, int patch_size);
 
@@ -55,7 +53,6 @@ void initialize(Vector3i& f, int n_rows_dst, int n_cols_dst, int n_rows_ref, int
 
 }
 
-
 // iterate
 void patchmatch(Vector3i& f, Mat& img_dst, Mat& img_ref, int patch_size, int n_iterations) {
 
@@ -80,17 +77,10 @@ void patchmatch(Vector3i& f, Mat& img_dst, Mat& img_ref, int patch_size, int n_i
 			v[i][j] = sim(p1, p2, 1);
 		}
 
-
 	bool reverse = false;
 
 	for (int t = 0; t < n_iterations; t++) {
 
-		//Mat progress(img_dst.rows, img_dst.cols, img_dst.type());
-		//reconstruct(f, progress, img_ref, patch_size);
-		//imshow("progress", progress);
-		//cvWaitKey(0);
-
-		/* propagate */
 		cout << "iteration " << t + 1 << endl;
 
 		if (reverse) {
@@ -178,10 +168,8 @@ void patchmatch(Vector3i& f, Mat& img_dst, Mat& img_ref, int patch_size, int n_i
 				}
 			}
 		}
-
 	}
 }
-
 
 void reconstruct(Vector3i& f, Mat& dst, Mat& ref, int patch_size) {
 	int n_rows = dst.rows, n_cols = dst.cols;
@@ -193,46 +181,12 @@ void reconstruct(Vector3i& f, Mat& dst, Mat& ref, int patch_size) {
 	}
 }
 
-
 void testImage(vector<string>& image_names, const int n){
 	Mat image,cloud;
 	auto it = image_names.begin();
 	
-		
-	
-	
-		image = imread(*it);
-		cv::Mat img_left = cv::imread(*it, cv::IMREAD_COLOR);
-		cv::Mat img_right = cv::imread(*(it + 1), cv::IMREAD_COLOR);
-		dispmap(img_left, img_right);
-	
-	
-/*
-	Vector3i mapping;
-	Mat dst;
-	Mat ref;
-	Mat res;
-	srand((unsigned int)time(NULL));
-	auto it = image_names.begin();
-	dst = imread(*it );
-	for (; (it + 1) != image_names.end(); ++it) {
-		 ref = imread(*(it+1));
-		 res = dst.clone();
-
-	assert(dst.type() == CV_8UC3);
-	patchmatch(mapping, res, ref, 5, n);//最后一项数据是迭代次数
-	reconstruct(mapping, res, ref, 5);
-	dst = res.clone();
-	if ((it +2) == image_names.end()) {
-		cv::imwrite(".\\output.png", res);
-		cv::Mat img_left = cv::imread("output.png", cv::IMREAD_COLOR);
-		cv::Mat img_right = cv::imread(".\\images_png\\B22_500x500.png", cv::IMREAD_COLOR);
-		dispmap(img_left, img_right);
-		
-		
-
-	}
-	
-}
-	*/
+	image = imread(*it);
+	cv::Mat img_left = cv::imread(*it, cv::IMREAD_COLOR);
+	cv::Mat img_right = cv::imread(*(it + 1), cv::IMREAD_COLOR);
+	dispmap(img_left, img_right);
 }

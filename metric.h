@@ -15,7 +15,6 @@ typedef double			float64;	// 双精度浮点
 
 /** \brief float32无效值 */
 
-
 namespace metric {
 
 	using namespace cv;
