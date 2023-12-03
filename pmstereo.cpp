@@ -20,35 +20,35 @@ namespace pms_util
 {
 
 	/**
-	* \brief »ñÈ¡ÏñËØ(i,j)µÄÑÕÉ«Öµ
-	* \param img_data	ÑÕÉ«Êı×é
-	* \param width		Ó°Ïñ¿í
-	* \param height		Ó°Ïñ¸ß
-	* \param i			ÏñËØĞĞ×ø±ê
-	* \param j			ÏñËØÁĞ×ø±ê
-	* \return ÏñËØ(i,j)µÄÑÕÉ«Öµ
+	* \brief è·å–åƒç´ (i,j)çš„é¢œè‰²å€¼
+	* \param img_data	é¢œè‰²æ•°ç»„
+	* \param width		å½±åƒå®½
+	* \param height		å½±åƒé«˜
+	* \param i			åƒç´ è¡Œåæ ‡
+	* \param j			åƒç´ åˆ—åæ ‡
+	* \return åƒç´ (i,j)çš„é¢œè‰²å€¼
 	*/
 	PColor GetColor(const uint8* img_data, const sint32& width, const sint32& height, const sint32& i, const sint32& j);
 
 	/**
-	 * \brief ÖĞÖµÂË²¨
-	 * \param in				ÊäÈë£¬Ô´Êı¾İ
-	 * \param out				Êä³ö£¬Ä¿±êÊı¾İ
-	 * \param width				ÊäÈë£¬¿í¶È
-	 * \param height			ÊäÈë£¬¸ß¶È
-	 * \param wnd_size			ÊäÈë£¬´°¿Ú¿í¶È
+	 * \brief ä¸­å€¼æ»¤æ³¢
+	 * \param in				è¾“å…¥ï¼Œæºæ•°æ®
+	 * \param out				è¾“å‡ºï¼Œç›®æ ‡æ•°æ®
+	 * \param width				è¾“å…¥ï¼Œå®½åº¦
+	 * \param height			è¾“å…¥ï¼Œé«˜åº¦
+	 * \param wnd_size			è¾“å…¥ï¼Œçª—å£å®½åº¦
 	 */
 	void MedianFilter(const float32* in, float32* out, const sint32& width, const sint32& height, const sint32 wnd_size);
 
 	/**
-	 * \brief ¼ÓÈ¨ÖĞÖµÂË²¨
-	 * \param img_data		ÑÕÉ«Êı×é
-	 * \param width			Ó°Ïñ¿í
-	 * \param height		Ó°Ïñ¸ß
-	 * \param wnd_size		´°¿Ú´óĞ¡
-	 * \param gamma			gammaÖµ
-	 * \param filter_pixels ĞèÒªÂË²¨µÄÏñËØ¼¯
-	 * \param disparity_map ÊÓ²îÍ¼
+	 * \brief åŠ æƒä¸­å€¼æ»¤æ³¢
+	 * \param img_data		é¢œè‰²æ•°ç»„
+	 * \param width			å½±åƒå®½
+	 * \param height		å½±åƒé«˜
+	 * \param wnd_size		çª—å£å¤§å°
+	 * \param gamma			gammaå€¼
+	 * \param filter_pixels éœ€è¦æ»¤æ³¢çš„åƒç´ é›†
+	 * \param disparity_map è§†å·®å›¾
 	 */
 	void WeightedMedianFilter(const uint8* img_data, const sint32& width, const sint32& height, const sint32& wnd_size, const float32& gamma, const vector<pair<int, int>>& filter_pixels, float32* disparity_map);
 
@@ -63,34 +63,34 @@ PatchMatchStereo::~PatchMatchStereo()
 
 bool PatchMatchStereo::Initialize(const sint32& width, const sint32& height, const PMSOption& option)
 {
-	// ¡¤¡¤¡¤ ¸³Öµ
+	// Â·Â·Â· èµ‹å€¼
 
-	// Ó°Ïñ³ß´ç
+	// å½±åƒå°ºå¯¸
 	width_ = width;
 	height_ = height;
-	// PMS²ÎÊı
+	// PMSå‚æ•°
 	option_ = option;
 
 	if (width <= 0 || height <= 0) {
 		return false;
 	}
 
-	//¡¤¡¤¡¤ ¿ª±ÙÄÚ´æ¿Õ¼ä
+	//Â·Â·Â· å¼€è¾Ÿå†…å­˜ç©ºé—´
 	const sint32 img_size = width * height;
 	const sint32 disp_range = option.max_disparity - option.min_disparity;
-	// »Ò¶ÈÊı¾İ
+	// ç°åº¦æ•°æ®
 	gray_left_ = new uint8[img_size];
 	gray_right_ = new uint8[img_size];
-	// Ìİ¶ÈÊı¾İ
+	// æ¢¯åº¦æ•°æ®
 	grad_left_ = new PGradient[img_size]();
 	grad_right_ = new PGradient[img_size]();
-	// ´ú¼ÛÊı¾İ
+	// ä»£ä»·æ•°æ®
 	cost_left_ = new float32[img_size];
 	cost_right_ = new float32[img_size];
-	// ÊÓ²îÍ¼
+	// è§†å·®å›¾
 	disp_left_ = new float32[img_size];
 	disp_right_ = new float32[img_size];
-	// Æ½Ãæ¼¯
+	// å¹³é¢é›†
 	plane_left_ = new DisparityPlane[img_size];
 	plane_right_ = new DisparityPlane[img_size];
 
@@ -127,33 +127,28 @@ bool PatchMatchStereo::Match(const uint8* img_left, const uint8* img_right, floa
 	img_left_ = img_left;
 	img_right_ = img_right;
 
-	// Ëæ»ú³õÊ¼»¯
+	// éšæœºåˆå§‹åŒ–
 	RandomInitialization();
 
-	// ¼ÆËã»Ò¶ÈÍ¼
+	// è®¡ç®—ç°åº¦å›¾
 	ComputeGray();
 
-	// ¼ÆËãÌİ¶ÈÍ¼
+	// è®¡ç®—æ¢¯åº¦å›¾
 	ComputeGradient();
 
-	// µü´ú´«²¥
+	// è¿­ä»£ä¼ æ’­
 	Propagation();
 
-	// Æ½Ãæ×ª»»³ÉÊÓ²î
+	// å¹³é¢è½¬æ¢æˆè§†å·®
 	PlaneToDisparity();
 
-	// ×óÓÒÒ»ÖÂĞÔ¼ì²é
+	// å·¦å³ä¸€è‡´æ€§æ£€æŸ¥
 	if (option_.is_check_lr) {
-		// Ò»ÖÂĞÔ¼ì²é
+		// ä¸€è‡´æ€§æ£€æŸ¥
 		LRCheck();
 	}
 
-	// ÊÓ²îÌî³ä
-	if (option_.is_fill_holes) {
-		FillHolesInDispMap();
-	}
-
-	// Êä³öÊÓ²îÍ¼
+	// è¾“å‡ºè§†å·®å›¾
 	if (disp_left && disp_left_) {
 		memcpy(disp_left, disp_left_, height_ * width_ * sizeof(float32));
 	}
@@ -162,10 +157,10 @@ bool PatchMatchStereo::Match(const uint8* img_left, const uint8* img_right, floa
 
 bool PatchMatchStereo::Reset(const uint32& width, const uint32& height, const PMSOption& option)
 {
-	// ÊÍ·ÅÄÚ´æ
+	// é‡Šæ”¾å†…å­˜
 	Release();
 
-	// ÖØÖÃ³õÊ¼»¯±ê¼Ç
+	// é‡ç½®åˆå§‹åŒ–æ ‡è®°
 	is_initialized_ = false;
 
 	return Initialize(width, height, option);
@@ -208,7 +203,7 @@ void PatchMatchStereo::RandomInitialization() const
 	const sint32 min_disparity = option.min_disparity;
 	const sint32 max_disparity = option.max_disparity;
 
-	// Ëæ»úÊıÉú³ÉÆ÷
+	// éšæœºæ•°ç”Ÿæˆå™¨
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	const std::uniform_real_distribution<float32> rand_d(static_cast<float32>(min_disparity), static_cast<float32>(max_disparity));
@@ -222,14 +217,14 @@ void PatchMatchStereo::RandomInitialization() const
 		for (sint32 y = 0; y < height; y++) {
 			for (sint32 x = 0; x < width; x++) {
 				const sint32 p = y * width + x;
-				// Ëæ»úÊÓ²îÖµ
+				// éšæœºè§†å·®å€¼
 				float32 disp = sign * exp(gen);
 				if (option.is_integer_disp) {
 					disp = static_cast<float32>(round(disp));
 				}
 				disp_ptr[p] = disp;
 
-				// Ëæ»ú·¨ÏòÁ¿
+				// éšæœºæ³•å‘é‡
 				PVector3f norm;
 				if (!option.is_fource_fpw) {
 					norm.x = exp(gen);
@@ -245,7 +240,7 @@ void PatchMatchStereo::RandomInitialization() const
 					norm.x = 0.0f; norm.y = 0.0f; norm.z = 1.0f;
 				}
 
-				// ¼ÆËãÊÓ²îÆ½Ãæ
+				// è®¡ç®—è§†å·®å¹³é¢
 				plane_ptr[p] = DisparityPlane(x, y, norm, disp);
 			}
 		}
@@ -262,7 +257,7 @@ void PatchMatchStereo::ComputeGray() const
 		return;
 	}
 
-	// ²ÊÉ«×ª»Ò¶È
+	// å½©è‰²è½¬ç°åº¦
 	for (sint32 n = 0; n < 2; n++) {
 		auto* color = (n == 0) ? img_left_ : img_right_;
 		auto* gray = (n == 0) ? gray_left_ : gray_right_;
@@ -287,7 +282,7 @@ void PatchMatchStereo::ComputeGradient() const
 		return;
 	}
 
-	// SobelÌİ¶ÈËã×Ó
+	// Sobelæ¢¯åº¦ç®—å­
 	for (sint32 n = 0; n < 2; n++) {
 		auto* gray = (n == 0) ? gray_left_ : gray_right_;
 		auto* grad = (n == 0) ? grad_left_ : grad_right_;
@@ -299,7 +294,7 @@ void PatchMatchStereo::ComputeGradient() const
 				const auto grad_y = (-gray[(y - 1) * width + x - 1] - 2 * gray[(y - 1) * width + x] - gray[(y - 1) * width + x + 1]) +
 					(gray[(y + 1) * width + x - 1] + 2 * gray[(y + 1) * width + x] + gray[(y + 1) * width + x + 1]);
 
-				// ÕâÀï³ıÒÔ8ÊÇÎªÁËÈÃÌİ¶ÈµÄ×î´óÖµ²»³¬¹ı255£¬ÕâÑù¼ÆËã´ú¼ÛÊ±Ìİ¶È²îºÍÑÕÉ«²îÎ»ÓÚÍ¬Ò»¸ö³ß¶È
+				// è¿™é‡Œé™¤ä»¥8æ˜¯ä¸ºäº†è®©æ¢¯åº¦çš„æœ€å¤§å€¼ä¸è¶…è¿‡255ï¼Œè¿™æ ·è®¡ç®—ä»£ä»·æ—¶æ¢¯åº¦å·®å’Œé¢œè‰²å·®ä½äºåŒä¸€ä¸ªå°ºåº¦
 				grad[y * width + x].x = grad_x / 8;
 				grad[y * width + x].y = grad_y / 8;
 			}
@@ -319,17 +314,17 @@ void PatchMatchStereo::Propagation() const
 		return;
 	}
 
-	// ×óÓÒÊÓÍ¼Æ¥Åä²ÎÊı
+	// å·¦å³è§†å›¾åŒ¹é…å‚æ•°
 	const auto opion_left = option_;
 	auto option_right = option_;
 	option_right.min_disparity = -opion_left.max_disparity;
 	option_right.max_disparity = -opion_left.min_disparity;
 
-	// ×óÓÒÊÓÍ¼´«²¥ÊµÀı
+	// å·¦å³è§†å›¾ä¼ æ’­å®ä¾‹
 	PMSPropagation propa_left(width, height, img_left_, img_right_, grad_left_, grad_right_, plane_left_, plane_right_, opion_left, cost_left_, cost_right_, disp_left_);
 	PMSPropagation propa_right(width, height, img_right_, img_left_, grad_right_, grad_left_, plane_right_, plane_left_, option_right, cost_right_, cost_left_, disp_right_);
 
-	// µü´ú´«²¥
+	// è¿­ä»£ä¼ æ’­
 	for (int k = 0; k < option_.num_iters; k++) {
 		propa_left.DoPropagation();
 		propa_right.DoPropagation();
@@ -343,19 +338,19 @@ void PatchMatchStereo::LRCheck()
 
 	const float32& threshold = option_.lrcheck_thres;
 
-	// k==0 : ×óÊÓÍ¼Ò»ÖÂĞÔ¼ì²é
-	// k==1 : ÓÒÊÓÍ¼Ò»ÖÂĞÔ¼ì²é
+	// k==0 : å·¦è§†å›¾ä¸€è‡´æ€§æ£€æŸ¥
+	// k==1 : å³è§†å›¾ä¸€è‡´æ€§æ£€æŸ¥
 	for (int k = 0; k < 2; k++) {
 		auto* disp_left = (k == 0) ? disp_left_ : disp_right_;
 		auto* disp_right = (k == 0) ? disp_right_ : disp_left_;
 		auto& mismatches = (k == 0) ? mismatches_left_ : mismatches_right_;
 		mismatches.clear();
 
-		// ---×óÓÒÒ»ÖÂĞÔ¼ì²é
+		// ---å·¦å³ä¸€è‡´æ€§æ£€æŸ¥
 		for (sint32 y = 0; y < height; y++) {
 			for (sint32 x = 0; x < width; x++) {
 
-				// ×óÓ°ÏñÊÓ²îÖµ
+				// å·¦å½±åƒè§†å·®å€¼
 				auto& disp = disp_left[y * width + x];
 
 				if (disp == Invalid_Float) {
@@ -363,100 +358,28 @@ void PatchMatchStereo::LRCheck()
 					continue;
 				}
 
-				// ¸ù¾İÊÓ²îÖµÕÒµ½ÓÒÓ°ÏñÉÏ¶ÔÓ¦µÄÍ¬ÃûÏñËØ
+				// æ ¹æ®è§†å·®å€¼æ‰¾åˆ°å³å½±åƒä¸Šå¯¹åº”çš„åŒååƒç´ 
 				const auto col_right = lround(x - disp);
 
 				if (col_right >= 0 && col_right < width) {
-					// ÓÒÓ°ÏñÉÏÍ¬ÃûÏñËØµÄÊÓ²îÖµ
+					// å³å½±åƒä¸ŠåŒååƒç´ çš„è§†å·®å€¼
 					auto& disp_r = disp_right[y * width + col_right];
 
-					// ÅĞ¶ÏÁ½¸öÊÓ²îÖµÊÇ·ñÒ»ÖÂ£¨²îÖµÔÚãĞÖµÄÚÎªÒ»ÖÂ£©
-					// ÔÚ±¾´úÂëÀï£¬×óÓÒÊÓÍ¼µÄÊÓ²îÖµ·ûºÅÏà·´
+					// åˆ¤æ–­ä¸¤ä¸ªè§†å·®å€¼æ˜¯å¦ä¸€è‡´ï¼ˆå·®å€¼åœ¨é˜ˆå€¼å†…ä¸ºä¸€è‡´ï¼‰
+					// åœ¨æœ¬ä»£ç é‡Œï¼Œå·¦å³è§†å›¾çš„è§†å·®å€¼ç¬¦å·ç›¸å
 					if (abs(disp + disp_r) > threshold) {
-						// ÈÃÊÓ²îÖµÎŞĞ§
+						// è®©è§†å·®å€¼æ— æ•ˆ
 						disp = Invalid_Float;
 						mismatches.emplace_back(x, y);
 					}
 				}
 				else {
-					// Í¨¹ıÊÓ²îÖµÔÚÓÒÓ°ÏñÉÏÕÒ²»µ½Í¬ÃûÏñËØ£¨³¬³öÓ°Ïñ·¶Î§£©
+					// é€šè¿‡è§†å·®å€¼åœ¨å³å½±åƒä¸Šæ‰¾ä¸åˆ°åŒååƒç´ ï¼ˆè¶…å‡ºå½±åƒèŒƒå›´ï¼‰
 					disp = Invalid_Float;
 					mismatches.emplace_back(x, y);
 				}
 			}
 		}
-	}
-}
-
-void PatchMatchStereo::FillHolesInDispMap()
-{
-	const sint32 width = width_;
-	const sint32 height = height_;
-	if (width <= 0 || height <= 0 ||
-		disp_left_ == nullptr || disp_right_ == nullptr ||
-		plane_left_ == nullptr || plane_right_ == nullptr) {
-		return;
-	}
-
-	const auto& option = option_;
-
-	// k==0 : ×óÊÓÍ¼ÊÓ²îÌî³ä
-	// k==1 : ÓÒÊÓÍ¼ÊÓ²îÌî³ä
-	for (int k = 0; k < 2; k++) {
-		auto& mismatches = (k == 0) ? mismatches_left_ : mismatches_right_;
-		if (mismatches.empty()) {
-			continue;
-		}
-		const auto* img_ptr = (k == 0) ? img_left_ : img_right_;
-		const auto* plane_ptr = (k == 0) ? plane_left_ : plane_right_;
-		auto* disp_ptr = (k == 0) ? disp_left_ : disp_right_;
-		vector<float32> fill_disps(mismatches.size());		// ´æ´¢Ã¿¸ö´ıÌî³äÏñËØµÄÊÓ²î
-		for (auto n = 0u; n < mismatches.size(); n++) {
-			auto& pix = mismatches[n];
-			const sint32 x = pix.first;
-			const sint32 y = pix.second;
-			vector<DisparityPlane> planes;
-
-			// Ïò×óÏòÓÒ¸÷ËÑÑ°µÚÒ»¸öÓĞĞ§ÏñËØ£¬¼ÇÂ¼Æ½Ãæ
-			sint32 xs = x + 1;
-			while (xs < width) {
-				if (disp_ptr[y * width + xs] != Invalid_Float) {
-					planes.push_back(plane_ptr[y * width + xs]);
-					break;
-				}
-				xs++;
-			}
-			xs = x - 1;
-			while (xs >= 0) {
-				if (disp_ptr[y * width + xs] != Invalid_Float) {
-					planes.push_back(plane_ptr[y * width + xs]);
-					break;
-				}
-				xs--;
-			}
-
-			if (planes.empty()) {
-				continue;
-			}
-			else if (planes.size() == 1u) {
-				fill_disps[n] = planes[0].to_disparity(x, y);
-			}
-			else {
-				// Ñ¡Ôñ½ÏĞ¡µÄÊÓ²î
-				const auto d1 = planes[0].to_disparity(x, y);
-				const auto d2 = planes[1].to_disparity(x, y);
-				fill_disps[n] = abs(d1) < abs(d2) ? d1 : d2;
-			}
-		}
-		for (auto n = 0u; n < mismatches.size(); n++) {
-			auto& pix = mismatches[n];
-			const sint32 x = pix.first;
-			const sint32 y = pix.second;
-			disp_ptr[y * width + x] = fill_disps[n];
-		}
-
-		// ¼ÓÈ¨ÖĞÖµÂË²¨
-		pms_util::WeightedMedianFilter(img_ptr, width, height, option.patch_size, option.gamma, mismatches, disp_ptr);
 	}
 }
 

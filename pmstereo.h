@@ -5,7 +5,7 @@
 
 
 /**
- * \brief PatchMatchÀà
+ * \brief PatchMatchç±»
  */
 class PatchMatchStereo
 {
@@ -15,113 +15,110 @@ public:
 
 public:
 	/**
-	* \brief ÀàµÄ³õÊ¼»¯£¬Íê³ÉÒ»Ğ©ÄÚ´æµÄÔ¤·ÖÅä¡¢²ÎÊıµÄÔ¤ÉèÖÃµÈ
-	* \param width		ÊäÈë£¬ºËÏßÏñ¶ÔÓ°Ïñ¿í
-	* \param height		ÊäÈë£¬ºËÏßÏñ¶ÔÓ°Ïñ¸ß
-	* \param option		ÊäÈë£¬Ëã·¨²ÎÊı
+	* \brief ç±»çš„åˆå§‹åŒ–ï¼Œå®Œæˆä¸€äº›å†…å­˜çš„é¢„åˆ†é…ã€å‚æ•°çš„é¢„è®¾ç½®ç­‰
+	* \param width		è¾“å…¥ï¼Œæ ¸çº¿åƒå¯¹å½±åƒå®½
+	* \param height		è¾“å…¥ï¼Œæ ¸çº¿åƒå¯¹å½±åƒé«˜
+	* \param option		è¾“å…¥ï¼Œç®—æ³•å‚æ•°
 	*/
 	bool Initialize(const sint32& width, const sint32& height, const PMSOption& option);
 
 	/**
-	* \brief Ö´ĞĞÆ¥Åä
-	* \param img_left	ÊäÈë£¬×óÓ°ÏñÊı¾İÖ¸Õë£¬3Í¨µÀ
-	* \param img_right	ÊäÈë£¬ÓÒÓ°ÏñÊı¾İÖ¸Õë£¬3Í¨µÀ
-	* \param disp_left	Êä³ö£¬×óÓ°ÏñÊÓ²îÍ¼Ö¸Õë£¬Ô¤ÏÈ·ÖÅäºÍÓ°ÏñµÈ³ß´çµÄÄÚ´æ¿Õ¼ä
+	* \brief æ‰§è¡ŒåŒ¹é…
+	* \param img_left	è¾“å…¥ï¼Œå·¦å½±åƒæ•°æ®æŒ‡é’ˆï¼Œ3é€šé“
+	* \param img_right	è¾“å…¥ï¼Œå³å½±åƒæ•°æ®æŒ‡é’ˆï¼Œ3é€šé“
+	* \param disp_left	è¾“å‡ºï¼Œå·¦å½±åƒè§†å·®å›¾æŒ‡é’ˆï¼Œé¢„å…ˆåˆ†é…å’Œå½±åƒç­‰å°ºå¯¸çš„å†…å­˜ç©ºé—´
 	*/
 	bool Match(const uint8* img_left, const uint8* img_right, float32* disp_left);
 
 	/**
-	* \brief ÖØÉè
-	* \param width		ÊäÈë£¬ºËÏßÏñ¶ÔÓ°Ïñ¿í
-	* \param height		ÊäÈë£¬ºËÏßÏñ¶ÔÓ°Ïñ¸ß
-	* \param option		ÊäÈë£¬Ëã·¨²ÎÊı
+	* \brief é‡è®¾
+	* \param width		è¾“å…¥ï¼Œæ ¸çº¿åƒå¯¹å½±åƒå®½
+	* \param height		è¾“å…¥ï¼Œæ ¸çº¿åƒå¯¹å½±åƒé«˜
+	* \param option		è¾“å…¥ï¼Œç®—æ³•å‚æ•°
 	*/
 	bool Reset(const uint32& width, const uint32& height, const PMSOption& option);
 
 
 	/**
-	 * \brief »ñÈ¡ÊÓ²îÍ¼Ö¸Õë
-	 * \param view 0-×óÊÓÍ¼ 1-ÓÒÊÓÍ¼
-	 * \return ÊÓ²îÍ¼Ö¸Õë
+	 * \brief è·å–è§†å·®å›¾æŒ‡é’ˆ
+	 * \param view 0-å·¦è§†å›¾ 1-å³è§†å›¾
+	 * \return è§†å·®å›¾æŒ‡é’ˆ
 	 */
 	float* GetDisparityMap(const sint32& view) const;
 
 
 	/**
-	 * \brief »ñÈ¡Ìİ¶ÈÍ¼Ö¸Õë
-	 * \param view 0-×óÊÓÍ¼ 1-ÓÒÊÓÍ¼
-	 * \return Ìİ¶ÈÍ¼Ö¸Õë
+	 * \brief è·å–æ¢¯åº¦å›¾æŒ‡é’ˆ
+	 * \param view 0-å·¦è§†å›¾ 1-å³è§†å›¾
+	 * \return æ¢¯åº¦å›¾æŒ‡é’ˆ
 	 */
 	PGradient* GetGradientMap(const sint32& view) const;
 private:
-	/** \brief Ëæ»ú³õÊ¼»¯ */
+	/** \brief éšæœºåˆå§‹åŒ– */
 	void RandomInitialization() const;
 
-	/** \brief ¼ÆËã»Ò¶ÈÊı¾İ */
+	/** \brief è®¡ç®—ç°åº¦æ•°æ® */
 	void ComputeGray() const;
 
-	/** \brief ¼ÆËãÌİ¶ÈÊı¾İ */
+	/** \brief è®¡ç®—æ¢¯åº¦æ•°æ® */
 	void ComputeGradient() const;
 
-	/** \brief µü´ú´«²¥ */
+	/** \brief è¿­ä»£ä¼ æ’­ */
 	void Propagation() const;
 
-	/** \brief Ò»ÖÂĞÔ¼ì²é	 */
+	/** \brief ä¸€è‡´æ€§æ£€æŸ¥	 */
 	void LRCheck();
 
-	/** \brief ÊÓ²îÍ¼Ìî³ä */
-	void FillHolesInDispMap();
-
-	/** \brief Æ½Ãæ×ª»»³ÉÊÓ²î */
+	/** \brief å¹³é¢è½¬æ¢æˆè§†å·® */
 	void PlaneToDisparity() const;
 
-	/** \brief ÄÚ´æÊÍ·Å	 */
+	/** \brief å†…å­˜é‡Šæ”¾	 */
 	void Release();
 
 private:
-	/** \brief PMS²ÎÊı	 */
+	/** \brief PMSå‚æ•°	 */
 	PMSOption option_;
 
-	/** \brief Ó°Ïñ¿í	 */
+	/** \brief å½±åƒå®½	 */
 	sint32 width_;
 
-	/** \brief Ó°Ïñ¸ß	 */
+	/** \brief å½±åƒé«˜	 */
 	sint32 height_;
 
-	/** \brief ×óÓ°ÏñÊı¾İ	 */
+	/** \brief å·¦å½±åƒæ•°æ®	 */
 	const uint8* img_left_;
-	/** \brief ÓÒÓ°ÏñÊı¾İ	 */
+	/** \brief å³å½±åƒæ•°æ®	 */
 	const uint8* img_right_;
 
-	/** \brief ×óÓ°Ïñ»Ò¶ÈÊı¾İ	 */
+	/** \brief å·¦å½±åƒç°åº¦æ•°æ®	 */
 	uint8* gray_left_;
-	/** \brief ÓÒÓ°Ïñ»Ò¶ÈÊı¾İ	 */
+	/** \brief å³å½±åƒç°åº¦æ•°æ®	 */
 	uint8* gray_right_;
 
-	/** \brief ×óÓ°ÏñÌİ¶ÈÊı¾İ	 */
+	/** \brief å·¦å½±åƒæ¢¯åº¦æ•°æ®	 */
 	PGradient* grad_left_;
-	/** \brief ÓÒÓ°ÏñÌİ¶ÈÊı¾İ	 */
+	/** \brief å³å½±åƒæ¢¯åº¦æ•°æ®	 */
 	PGradient* grad_right_;
 
-	/** \brief ×óÓ°Ïñ¾ÛºÏ´ú¼ÛÊı¾İ	 */
+	/** \brief å·¦å½±åƒèšåˆä»£ä»·æ•°æ®	 */
 	float32* cost_left_;
-	/** \brief ÓÒÓ°Ïñ¾ÛºÏ´ú¼ÛÊı¾İ	 */
+	/** \brief å³å½±åƒèšåˆä»£ä»·æ•°æ®	 */
 	float32* cost_right_;
 
-	/** \brief ×óÓ°ÏñÊÓ²îÍ¼	*/
+	/** \brief å·¦å½±åƒè§†å·®å›¾	*/
 	float32* disp_left_;
-	/** \brief ÓÒÓ°ÏñÊÓ²îÍ¼	*/
+	/** \brief å³å½±åƒè§†å·®å›¾	*/
 	float32* disp_right_;
 
-	/** \brief ×óÓ°ÏñÆ½Ãæ¼¯	*/
+	/** \brief å·¦å½±åƒå¹³é¢é›†	*/
 	DisparityPlane* plane_left_;
-	/** \brief ÓÒÓ°ÏñÆ½Ãæ¼¯	*/
+	/** \brief å³å½±åƒå¹³é¢é›†	*/
 	DisparityPlane* plane_right_;
 
-	/** \brief ÊÇ·ñ³õÊ¼»¯±êÖ¾	*/
+	/** \brief æ˜¯å¦åˆå§‹åŒ–æ ‡å¿—	*/
 	bool is_initialized_;
 
-	/** \brief ÎóÆ¥ÅäÇøÏñËØ¼¯	*/
+	/** \brief è¯¯åŒ¹é…åŒºåƒç´ é›†	*/
 	vector<pair<int, int>> mismatches_left_;
 	vector<pair<int, int>> mismatches_right_;
 
