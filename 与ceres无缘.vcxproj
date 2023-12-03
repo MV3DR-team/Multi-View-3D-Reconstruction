@@ -24,7 +24,7 @@
     <ProjectGuid>{3a128792-833f-4d0e-8e09-95e68e8bd4e9}</ProjectGuid>
     <RootNamespace>与ceres无缘</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>FuckingHMY</ProjectName>
+    <ProjectName>MV3DR</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
