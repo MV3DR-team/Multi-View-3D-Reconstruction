@@ -143,7 +143,7 @@
     <ClCompile Include="pmstereo.cpp" />
     <ClCompile Include="propagation.cpp" />
     <ClCompile Include="util.cpp" />
-    <ClCompile Include="源.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="disp.h" />
