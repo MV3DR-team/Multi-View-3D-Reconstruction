@@ -170,45 +170,7 @@ void maskout_colors(vector<Vec3b>& p1, Mat& mask)
 			p1.push_back(p1_copy[i]);
 	}
 }
-// 这个函数的主要目的是将旋转矩阵、运动矩阵、三维结构和颜色信息保存到文件中
-void save_structure(string file_name, vector<Mat>& rotations, vector<Mat>& motions, vector<Point3d>& structure, vector<Vec3b>& colors)
-{                                               //旋转矩阵            //运动矩阵
-	int n = (int)rotations.size();
 
-	FileStorage fs(file_name, FileStorage::WRITE);
-	fs << "Camera Count" << n;
-	fs << "Point Count" << (int)structure.size();
-
-	fs << "Rotations" << "[";
-	for (size_t i = 0; i < n; ++i)
-	{
-		fs << rotations[i];
-	}
-	fs << "]";
-
-	fs << "Motions" << "[";
-	for (size_t i = 0; i < n; ++i)
-	{
-		fs << motions[i];
-	}
-	fs << "]";
-
-	fs << "Points" << "[";
-	for (size_t i = 0; i < structure.size(); ++i)
-	{
-		fs << structure[i];
-	}
-	fs << "]";
-
-	fs << "Colors" << "[";
-	for (size_t i = 0; i < colors.size(); ++i)
-	{
-		fs << colors[i];
-	}
-	fs << "]";
-
-	fs.release();//释放文件对象
-}
 //这个函数的主要目的是从匹配的特征点中获取对应的三维点（object points）和二维点（image points）。
 void get_objpoints_and_imgpoints(
 	vector<DMatch>& matches,
@@ -445,7 +407,7 @@ void bundle_adjustment(
 			<< std::endl;
 	}
 }
-
+//存储点云位置和颜色信息到ply文件里
 void save_ply_file(
 	const std::string& ply_save_path,
 	std::vector<cv::Point3d>& structure,
