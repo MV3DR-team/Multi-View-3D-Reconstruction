@@ -32,12 +32,10 @@ void dispmap(Mat res, Mat ref)
 	cv::Mat img_right = ref;
 
 	if (img_left.data == nullptr || img_right.data == nullptr) {
-		std::cout << "读取影像失败！" << std::endl;
-	
+		std::cout << "读取影像失败！ " << std::endl;
 	}
 	if (img_left.rows != img_right.rows || img_left.cols != img_right.cols) {
-		std::cout << "左右影像尺寸不一致！" << std::endl;
-		
+		std::cout << "左右影像尺寸不一致！ "  << std::endl;
 	}
 
 
@@ -91,7 +89,7 @@ void dispmap(Mat res, Mat ref)
 	//···············································································//
 	// 初始化
 	if (!pms.Initialize(width, height, pms_option)) {
-		std::cout << "PMS初始化失败！" << std::endl;
+		std::cout << "PMS初始化失败！ " << std::endl;
 		
 	}
 	auto end = std::chrono::steady_clock::now();
@@ -105,7 +103,7 @@ void dispmap(Mat res, Mat ref)
 	// disparity数组保存子像素的视差结果
 	auto disparity = new float32[uint32(width * height)]();
 	if (!pms.Match(bytes_left, bytes_right, disparity)) {
-		std::cout << "PMS匹配失败！" << std::endl;
+		std::cout << "PMS匹配失败！ " << std::endl;
 		
 	}
 	end = std::chrono::steady_clock::now();
