@@ -438,7 +438,6 @@ void main()
 	//images_path.push_back("B24.jpg");
 	//images_path.push_back("B25.jpg");
 	
-	
 
 	//本征矩阵
 	Mat K(Matx33d(
