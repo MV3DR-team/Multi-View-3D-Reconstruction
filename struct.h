@@ -43,13 +43,12 @@ struct PMSOption {
 	float32	lrcheck_thres;		// 左右一致性约束阈值
 
 	bool	is_fource_fpw;		// 是否强制为Frontal-Parallel Window
-	bool	is_integer_disp;	// 是否为整像素视差
 
 	PMSOption() : patch_size(35), min_disparity(0), max_disparity(64), gamma(10.0f), alpha(0.9f), tau_col(10.0f),
 		tau_grad(2.0f), num_iters(3),
 		is_check_lr(false),
 		lrcheck_thres(0),
-		is_fource_fpw(false), is_integer_disp(false) { }
+		is_fource_fpw(false){ }
 };
 
 /**
