@@ -257,26 +257,6 @@ void init_structure(
 	}
 }
 
-
-////获取目录下的文件名
-//void get_file_names(string dir_name, vector<string>& names)
-//{
-//	names.clear();
-//	tinydir_dir dir;
-//	tinydir_open(&dir, dir_name.c_str());
-//
-//	while (dir.has_next)
-//	{
-//		tinydir_file file;
-//		tinydir_readfile(&dir, &file);
-//		if (!file.is_dir)
-//		{
-//			names.push_back(file.path);
-//		}
-//		tinydir_next(&dir);
-//	}
-//	tinydir_close(&dir);
-//}
 struct ReprojectCost
 {
 	cv::Point2d observation;
@@ -318,9 +298,6 @@ struct ReprojectCost
 		return true;
 	}
 };
-
-
-
 
 void bundle_adjustment(
 	cv::Mat& intrinsic,
@@ -543,9 +520,7 @@ void main()
 	//以上为bundlead_justment算法
 	for (int i = 0; i < intrinsic.rows; i++) { for (int j = 0; j < intrinsic.cols; j++) { cout << intrinsic.at<double>(i, j) << " "; } cout << endl; }
 
-
-
 	//以上为稀疏点云部分
 
-	testImage(images_path, 8);//生成稠密点云（效果还不是很好。。而且很慢。。）
+	testImage(images_path, 8);//生成稠密点云
 }
