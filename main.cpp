@@ -583,7 +583,7 @@ void main()
 
 
 	save_ply_file("output_test_BA.ply", structure, colors);
-	save_structure(".\\Viewer\\structure.yml", rotations, motions, structure, colors);//保存稀疏点云
+
 	//以上为稀疏点云部分
 
 	testImage(img_names, 8);//生成稠密点云（效果还不是很好。。而且很慢。。）
