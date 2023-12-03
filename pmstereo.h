@@ -38,14 +38,12 @@ public:
 	*/
 	bool Reset(const uint32& width, const uint32& height, const PMSOption& option);
 
-
 	/**
 	 * \brief 获取视差图指针
 	 * \param view 0-左视图 1-右视图
 	 * \return 视差图指针
 	 */
 	float* GetDisparityMap(const sint32& view) const;
-
 
 	/**
 	 * \brief 获取梯度图指针

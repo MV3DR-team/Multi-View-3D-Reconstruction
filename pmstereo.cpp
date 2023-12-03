@@ -281,7 +281,7 @@ void PatchMatchStereo::Propagation() const
 	// 迭代传播
 	for (int k = 0; k < option_.num_iters; k++) {
 		propa_left.DoPropagation();
-		propa_right.DoPropagation();
+ 		propa_right.DoPropagation();
 	}
 }
 

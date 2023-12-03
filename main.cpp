@@ -434,9 +434,9 @@ void main()
 	//path to photo
 	images_path.push_back("B21.jpg");
 	images_path.push_back("B22.jpg");
-	images_path.push_back("B23.jpg");
-	images_path.push_back("B24.jpg");
-	images_path.push_back("B25.jpg");
+	//images_path.push_back("B23.jpg");
+	//images_path.push_back("B24.jpg");
+	//images_path.push_back("B25.jpg");
 	
 	
 

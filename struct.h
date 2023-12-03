@@ -90,7 +90,7 @@ struct PVector2f {
 		x = v.x; y = v.y;
 	}
 
-	//fu
+	
 	// operator +
 	PVector2f operator+(const PVector2f& v) const {
 		return PVector2f(x + v.x, y + v.y);
@@ -145,7 +145,7 @@ struct PVector3f {
 		}
 	}
 
-	// ···operators
+	//运算符重载
 	// operator +
 	PVector3f operator+(const PVector3f& v) const {
 		return PVector3f(x + v.x, y + v.y, z + v.z);

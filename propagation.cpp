@@ -1,5 +1,6 @@
 //#include "stdafx.h"
 #include "propagation.h"
+#include <iostream>
 
 PMSPropagation::PMSPropagation(const sint32 width, const sint32 height, const uint8* img_left, const uint8* img_right,
 	const PGradient* grad_left, const PGradient* grad_right,
@@ -80,6 +81,13 @@ void PMSPropagation::DoPropagation()
 
 			x += dir;
 		}
+		std::system("cls");
+		std::cout << "Propagation:" << (i + 1) * width_ << "/" << height_ * width_ << std::endl;
+		std::cout << "[";
+		for (int k = 0; k < 100; k++)
+			std::cout << ((k < 100 * (float)i / height_) ? "=" : " ");
+		std::cout << "]";
+		
 		y += dir;
 	}
 	++num_iter_;
@@ -97,6 +105,15 @@ void PMSPropagation::ComputeCostData() const
 			const auto& plane_p = plane_left_[y * width_ + x];
 			cost_left_[y * width_ + x] = cost_cpt->ComputeA(x, y, plane_p);
 		}
+		
+		//打印进度
+		std::system("cls");
+		std::cout << "CostComputeProgress:" << (y+1)*width_ << "/" << height_ * width_ << std::endl;
+		std::cout << "[";
+		for (int i = 0; i < 100; i++)
+			std::cout << ((i < 100 * (float)y / height_) ?  "=" : " ");
+		std::cout << "]";
+
 	}
 }
 
