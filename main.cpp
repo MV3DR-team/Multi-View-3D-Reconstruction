@@ -1,19 +1,10 @@
-﻿#include "nonfree.hpp"
-#include <opencv2\features2d\features2d.hpp>
-#include <opencv2\highgui\highgui.hpp>
-#include <opencv2\calib3d\calib3d.hpp>
+﻿#include <opencv2\opencv.hpp>
+#include <ceres/ceres.h>
+#include <ceres/rotation.h>
 #include <iostream>
-#include "tinydir.h"
-#include "ceres/ceres.h"
-#include "ceres/rotation.h"
-#include "gflags/gflags.h"
-#include "glog/logging.h"
-#include "patchmatch.h"
-#include <stdio.h>
 #include <fstream>
-/*图片请用png格式~~~*/
-using namespace cv;
-using namespace std;
+#include "patchmatch.h"
+
 
 const double MRT = 0.7;
 
@@ -267,25 +258,25 @@ void init_structure(
 }
 
 
-//获取目录下的文件名
-void get_file_names(string dir_name, vector<string>& names)
-{
-	names.clear();
-	tinydir_dir dir;
-	tinydir_open(&dir, dir_name.c_str());
-
-	while (dir.has_next)
-	{
-		tinydir_file file;
-		tinydir_readfile(&dir, &file);
-		if (!file.is_dir)
-		{
-			names.push_back(file.path);
-		}
-		tinydir_next(&dir);
-	}
-	tinydir_close(&dir);
-}
+////获取目录下的文件名
+//void get_file_names(string dir_name, vector<string>& names)
+//{
+//	names.clear();
+//	tinydir_dir dir;
+//	tinydir_open(&dir, dir_name.c_str());
+//
+//	while (dir.has_next)
+//	{
+//		tinydir_file file;
+//		tinydir_readfile(&dir, &file);
+//		if (!file.is_dir)
+//		{
+//			names.push_back(file.path);
+//		}
+//		tinydir_next(&dir);
+//	}
+//	tinydir_close(&dir);
+//}
 struct ReprojectCost
 {
 	cv::Point2d observation;
@@ -366,7 +357,6 @@ void bundle_adjustment(
 			int point3d_id = point3d_ids[point_idx];
 			if (point3d_id < 0)
 				continue;
-			std::cout << img_idx << ":" << point_idx << std::endl;
 			cv::Point2d observed = key_points[point_idx].pt;
 			// 模板参数中，第一个为代价函数的类型，第二个为代价的维度，剩下三个分别为代价函数第一第二还有第三个参数的维度
 			ceres::CostFunction* cost_function = new ceres::AutoDiffCostFunction<ReprojectCost, 2, 4, 6, 3>(new ReprojectCost(observed));
@@ -441,8 +431,15 @@ void save_ply_file(
 
 void main()
 {
-	vector<string> img_names;
-	get_file_names("images", img_names);
+	std::vector<std::string> images_path;
+	//path to photo
+	images_path.push_back("B21.jpg");
+	images_path.push_back("B22.jpg");
+	images_path.push_back("B23.jpg");
+	images_path.push_back("B24.jpg");
+	images_path.push_back("B25.jpg");
+	
+	
 
 	//本征矩阵
 	Mat K(Matx33d(
@@ -455,7 +452,7 @@ void main()
 	vector<vector<Vec3b>> colors_for_all;
 	vector<vector<DMatch>> matches_for_all;
 	//提取所有图像的特征
-	extract_features(img_names, descriptor_for_all, key_points_for_all, colors_for_all);
+	extract_features(images_path, descriptor_for_all, key_points_for_all, colors_for_all);
 	//对所有图像进行顺次的特征匹配
 	match_all_features(descriptor_for_all, matches_for_all);
 
@@ -548,5 +545,5 @@ void main()
 
 	//以上为稀疏点云部分
 
-	testImage(img_names, 8);//生成稠密点云（效果还不是很好。。而且很慢。。）
+	testImage(images_path, 8);//生成稠密点云（效果还不是很好。。而且很慢。。）
 }

@@ -192,23 +192,9 @@ void SavePointCloud(const uint8* img_bytes, const float32* disp_map, const sint3
 	float32 x0r = 350+i;// 二图像主点x0
 	i = i + 50;
 
-	// 手动输出点云ply文件
-	std::ofstream ply_file("densePoints.ply");
-
-	// ply的头部信息
-	ply_file << "ply\n";
-	ply_file << "format ascii 1.0\n";
-	ply_file << "element vertex " << (height/3) * (width/3) << "\n";
-	ply_file << "property float x\n";
-	ply_file << "property float y\n";
-	ply_file << "property float z\n";
-	ply_file << "property uchar red\n";
-	ply_file << "property uchar green\n";
-	ply_file << "property uchar blue\n";
-	ply_file << "end_header\n";
-	// 写入点云数据
-	for (sint32 y = 0; y < height; y+=3) {
-		for (sint32 x = 0; x < width; x+=3) {
+	std::vector<uint8> temp_img;
+	for (sint32 y = 0; y < height; y) {
+		for (sint32 x = 0; x < width; x) {
 			const float32 disp = abs(disp_map[y * width + x]);
 			if (disp == Invalid_Float) {
 				continue;
@@ -217,12 +203,38 @@ void SavePointCloud(const uint8* img_bytes, const float32* disp_map, const sint3
 			float32 X = Z * (x - x0l) / f;
 			float32 Y = Z * (y - y0l) / f;
 			// X Y Z R G B
-			ply_file << X << " " << Y << " " << Z << " "
-				<< static_cast<int>(img_bytes[y * width * 3 + 3 * x + 2]) << " "
-				<< static_cast<int>(img_bytes[y * width * 3 + 3 * x + 1]) << " "
-				<< static_cast<int>(img_bytes[y * width * 3 + 3 * x]) << std::endl;
+			temp_img.push_back(X);
+			temp_img.push_back(Y);
+			temp_img.push_back(Z);
+			temp_img.push_back(static_cast<int>(img_bytes[y * width * 3 + 3 * x + 2]));
+			temp_img.push_back(static_cast<int>(img_bytes[y * width * 3 + 3 * x + 1]));
+			temp_img.push_back(static_cast<int>(img_bytes[y * width * 3 + 3 * x]));
 		}
 	}
 
+
+	// 手动输出点云ply文件
+	std::ofstream ply_file("densePoints.ply");
+
+	
+
+	// ply的头部信息
+	ply_file << "ply\n";
+	ply_file << "format ascii 1.0\n";
+	ply_file << "element vertex " << temp_img.size()/6 << "\n";
+	ply_file << "property float x\n";
+	ply_file << "property float y\n";
+	ply_file << "property float z\n";
+	ply_file << "property uchar red\n";
+	ply_file << "property uchar green\n";
+	ply_file << "property uchar blue\n";
+	ply_file << "end_header\n";
+	// 写入点云数据 
+
+	for (int i = 0; i < temp_img.size(); i += 6)
+	{
+		for (int j = 0; j < 5; ++j) ply_file << temp_img[i + j] << " ";
+		ply_file << temp_img[i + 5] << "\n";
+	}
 	ply_file.close();
 }

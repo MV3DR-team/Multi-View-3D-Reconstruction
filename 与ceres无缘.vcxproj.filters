@@ -18,24 +18,15 @@
     <ClCompile Include="main.cpp">
       <Filter>头文件\源文件</Filter>
     </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>头文件\源文件</Filter>
-    </ClCompile>
     <ClCompile Include="pmstereo.cpp">
       <Filter>头文件\源文件</Filter>
     </ClCompile>
     <ClCompile Include="propagation.cpp">
       <Filter>头文件\源文件</Filter>
     </ClCompile>
-    <ClCompile Include="util.cpp">
-      <Filter>头文件\源文件</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="metric.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="util.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
