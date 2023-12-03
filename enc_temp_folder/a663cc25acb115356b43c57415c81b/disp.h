@@ -67,7 +67,7 @@ void dispmap(Mat res, Mat ref)
 	// t_grad
 	pms_option.tau_grad = 2.0f;
 	// 传播迭代次数
-	pms_option.num_iters = 1;
+	pms_option.num_iters = 4;
 
 	// 一致性检查
 	pms_option.is_check_lr = true;
@@ -214,7 +214,7 @@ void SavePointCloud(const uint8* img_bytes, const float32* disp_map, const sint3
 		}
 	}
 
-	std::cout << "Saving dense point cloud as PLY file..."<<std::endl;
+	std::cout << "保存稠密点云为PLY文件中..."<<std::endl;
 	// 手动输出点云ply文件
 	std::ofstream ply_file("./result/densePoints.ply");
 	// ply的头部信息
@@ -240,5 +240,5 @@ void SavePointCloud(const uint8* img_bytes, const float32* disp_map, const sint3
 	}
 	ply_file.close();
 
-	std::cout << "Saving the dense point cloud as a PLY file was successful!! End of program "<<std::endl;
+	std::cout << "保存稠密点云为PLY文件成功!!!程序结束!! "<<std::endl;
 }
